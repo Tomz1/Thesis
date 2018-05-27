@@ -1,0 +1,144 @@
+%\documentclass[a4paper, 12pt, twoside]{Thesis}% 
+\documentclass[a4paper, 12pt, oneside]{Thesis}%ITS ONESIDE NOW JUST FOR EDITING
+
+\usepackage[draft]{todonotes}   % notes showed
+
+%THIS PACKAGES ARE FROM TEMPLATE DONT TOUCH!!!!!!!!!!!!!!!!!!
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{pdfpages}
+\usepackage{time}
+\usepackage{appendix}
+\usepackage{sidecap}
+\setlength{\parindent}{0.25in}
+\hypersetup{urlcolor=blue, colorlinks=false}
+%THIS PACKAGES ARE FROM TEMPLATE DONT TOUCH!!!!!!!!!!!!!!!!!!
+
+
+\def \listfigures {List of Figures}
+
+\def \university {University Institute of Lisbon}
+\def \department {Department of Information Science and Technology}
+
+\def \supervisortitle {Supervisor}
+\def \supervisorname  {Prof. João Carlos Amaro Ferreira, PhD}
+\def \supervisoruniv{ISCTE-IUL}
+
+\def \cosupervisortitle {Co-Supervisor}
+\def \cosupervisorname {Rui Maia, PhD}
+\def \cosupervisoruniv {Instituto Superior Técnico}
+
+\def \dissertationstatement {Relatório do Estado da Arte para:}
+\def \dissertationtitle {Introdução à Investigação em Engenharia }
+
+\begin{document}
+
+\frontmatter
+
+\title  {Vessel Behavior Analysis}
+\authors  {Tomás Manuel Cardoso Machado}
+            
+\addresses  {\groupname\\\deptname\\\univname}
+\date       {January 2018}
+\subject    {}
+\keywords   {}
+\maketitle
+
+\fancyhead{}
+%\fancyfoot[LE,RO]{\thepage} %PAGE NUMBER TO PRINT AFTER...
+\fancyfoot[C]{\thepage}
+\lhead{}
+
+\pagestyle{fancy}
+
+
+%-------ABSTRACT---------
+%\cleardoublepage
+%\addtotoc{Abstract}
+%\abstract{
+
+%Abstract text
+
+%\textbf{Keywords:} Keyword1, Keyword2.
+%}
+
+%\cleardoublepage
+%\setstretch{1.3}
+
+%-------IDIOMA DA TESE---------
+\selectlanguage{english}
+
+%-------ÍNDICE---------
+\lhead{\emph{Contents}}
+\tableofcontents
+
+%-------LISTA DE FIGURAS---------
+%\lhead{\emph{List of Figures}} 
+%\listoffigures 
+
+%-------LISTA DE TABELAS---------
+%\lhead{\emph{List of Tables}} 
+%\listoftables 
+
+%-------LISTA DE TODOS---------
+%\listoftodos
+
+%-------LISTA DE ALGORITMOS (caso necessário)---------
+%\lhead{\emph{List of Algorithms}}
+%\addtotoc{List of Algorithms}
+%\listofalgorithms
+%\listoftables
+
+%\setstretch{1.5}
+%\clearpage
+
+%-------LISTA DE ABREVIATURAS---------
+%\def \listsymbolname{Abbreviations}
+%\lhead{\emph{Abbreviations}}
+%\listofsymbols{ll}
+%{
+%\textbf{Acronym} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or \\
+%\textbf{AIS} & \textbf{A}utomatic \textbf{I}dentification \textbf{S}ystem (page~%%\pageref{label_AIS})\\
+%}
+
+%-------CAPÍTULOS---------
+\mainmatter	  % Numeração normal (1,2,3...)
+\pagestyle{fancy}
+
+\input{Chapter1}
+\input{Chapter2}
+\input{Chapter3}
+\addtocontents{toc}{\vspace{2em}}
+
+%-------ANEXOS---------
+
+%\appendix
+%\appendixpage
+%\addappheadtotoc
+
+%\chapter{Appendix's title}
+%\label{AppendixA}
+%\lhead{Appendix A. \emph{Appendix's title}}
+
+
+\addtocontents{toc}{\vspace{2em}}
+\backmatter
+
+%-------BIBLIOGRAFIA---------
+%Adicionem as referências em BibTeX ao ficheiro references.bib
+\label{References}
+\lhead{\emph{References}} 
+ 
+%\bibliographystyle{plain}
+%\bibliographystyle{ieeetr}
+%\bibliographystyle{ieeetr}
+
+\bibliographystyle{unsrt}
+\bibliography{ThesisReferences}
+
+\end{document}
