@@ -2,41 +2,89 @@
 \label{chapter:Chapter 3}
 \lhead{Chapter 3. \emph{Methods and Systems Developed}}
 
-In this Chapter, we present the developed Framework, Firstly by describing the overall view of the proposed Modular Framework, Secondly we provide a detailed explanation of each Module and the methods used for each Module. The modular Framework is proposed, as there are no defined inputs or outputs standards on the Maritime domain, so proposing a Framework that permits a flexibility of the system . D
+In this Chapter, we present the developed Framework, Firstly by describing the overall view of the proposed Modular Framework, Secondly we provide a detailed explanation of each Module and the methods used for each Module. The modular Framework is proposed, as there are no defined inputs or outputs standards on the Maritime domain, so by defining a Framework that permits a flexible system, allows a easier adoption of these services by Maritime end users. 
 
 \section{Proposed Framework}
-In order to develop a system capable of addressing the objectives proposed in chapter 1[TODO - REF FOR OBJECTIVES], we propose a Modular Vessel Anomaly Detection Framework, composed from four main modules, as shown in Fig. XX ...
+In order to develop a system capable of addressing the objectives proposed in chapter 1[TODO - REF FOR OBJECTIVES], we propose a Modular Vessel Anomaly Detection Framework, based on a Lambda Architecture, and having the Apache Ecosystem. composed from four main modules, as shown in Fig. XX ...
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = .29]{figures/UTE.png}
+	\includegraphics[scale = .25]{figures/UTE.png}
     \caption{Proposed Beta Framework[TODO NEEDS MORE DETAIL THIS IMAGE].}
     \label{fig: Framework}
 \end{figure}
 
 In the following subsections, we discuss each module: Data Fusion, Vessel T Extraction, Anomaly Detection and Reporting...
 
-\subsection{Data}
-This subsection presents a description, of the different types of Data and respective sources used. AIS data type was for the main source of data for this work, AIS is not-only the most common data type used in the maritime field, but it also the data type made available inside the project.
+\section{Data}
+This section we provide a description, of the different types of Data used and respective sources used. AIS data type was the main source of data for this work, AIS is not-only the most available type data (being the standard for the Maritime positional data), but it was also the data type made available inside the MARISA project.
+
+AIS Historical data can be found in open-access repositories, although AIS Data providers cap the frequency of the messages transitions. This drastically reduces the number of transmitted messages, but also reduces the overall detail of the Data, as lower transmissions rates produce a less certainty of the movement presented by each Vessel. For most general use cases of AIS (e.g. managing a fleet, estimations of time of arrival ...), transmissions rates of 3 Seconds or 30 Seconds, do not provide no information gain, as Vessel kinematics tend to not have abrupt changes, in short periods of time. 
+
+Although, via the MARISA project, we received AIS data via live feeds from Antennas all around the European coast. This Antennas receive the Vessels transmissions broadcast via AIS, till normally a range of 20 Nautical Miles of the shore. The MARISA Live Feeds permit a live test scenario for the proposed Framework, as the live data ingestion of these feeds will represent real case scenarios where the Framework will be Tested.
+
+\subsubsection{Live Data Feeds}
+National Marine Electronics Association (NMEA) is a standard communication protocol used by Maritime Sensors such as Accelerometer, Giroscope, GPS receivers, etc.
+NMEA being the standard it is the protocol that encapsulates the AIS information, broadcasted by AIS-equipped Vessels. 
+
+TODO SAME AS IN TOP ITS BS
+
+Via the project, we had access to multiple live NMEA feeds, as a way to not only validate our developed methods with live feeds of Nautical data, but also to produce methods that were capable of handling the scale of data that is produced by National feeds.
+
+
+TODO this might go to chap4
+
+AIS-Receiving stations receive the broadcast AIS information from numerous AIS-equipped Vessels simultaneously. Normally, AIS-Receiving stations are antennas located along the coast line in high grounds, the reception range of these antennas vary, mainly depending on distance to shore, the elevation in which the antenna is located, and the antenna type itself.
+
+Although, the distance in which Stations are capable of receiving AIS messages presents a problem to the Data, as reception ranges vary from 15 Nautical Miles to 50 Nautical Miles, this creates the problem of 
+
+\begin{enumerate}
+\item Duplication of Reception:  With the variation of reception ranges, it frequently occurs that multiple stations, receive the same  
+
+TODO - THIS BRINGS TO THE PROBLEM OF MULTIPLE ANTHENAS RECEIVING THE SAME FEED
+
+
+\item [TODO] disse que havia dois problemas
+\end{enumerate}
+
+
+\section{TODO TOPICS}
+DADOS
+
+PRE PROSS
+
+FEATURE EXTRACTION
+
+ARMAZENAMENTO -> CASSANDRA
+
+ANOMALIAS TODA A DEFINICAO 
+- FAZER AS QUE TENHO JA...
+
+
+\section{Unsupervised Vessel Route Extraction}
+Representing a Vessel trajectory data, can become a difficulty in the Maritime domain. There are a vast number of solutions described in the literature, which present different solutions for different types of problems. 
+
+A scalable method to represent a trajectory in the Maritime domain, is to look to the trajectory as a whole, this is, as Vessel are obliged to broadcast their AIS information in a semi-continuous rates; knowing that each AIS broadcast message represent the instantaneous kinematic information from a single vessel, aggregating this information over time will represent a vessel trajectory. 
+
+Thus, by identifying each vessel by its MMSI, a trajectory can be considered as the set of AIS messages, identified by the MMSI of each vessel. As each AIS message is time-stamped(contains the time in which was broadcast), our representation of trajectory can be defined as Multivariate Time-Series, this is for each trajectory we have $N$ time-series, in which $N$ represents the number of features considered for each trajectory, further explained in the subsection bellow.
+
+\subsection{Feature Extraction}
+AIS data, described in TODO chapter X TODO, presents different possibilities  analysis, as it contains detailed information the actual Vessel Behaviour. Although for this work we focused, on the information that more characterize the Vessel kinematics behaviour, thus decreasing the number of features we have in our Data-Model.
 
 
 
-the AIS data used that fed the Framework...[TODO]
-AIS Historical data can be found in open-access repositories, although open AIS Data providers cap the frequency of the messages transitions. This drastically reduces the number of transmitted messages, but also reduces the overall detail of the Data, as lower transmissions rates produce less certainty of the movement presented by each Vessel. AIS data-providers cap the transmission frequencies
+The choice of this features was done with the help of Maritime Knowledge Expert, ... TODO TODO ...
 
-for each Vessel, although this can . This is done, because it's assumed that Vessels don't turn abruptly and keep constant movement patterns for the most part.
-Although, 
+\section{Anomaly Definition}
+Nowadays, Vessel abnormal Behaviour is solely analysed by Human Maritime Experts, this is, every Maritime Security Agency assures the coastal surveillance of their territory, by assessing possible threats, and identifying abnormal behaviour. The abnormal Vessel behaviour is then further investigated by Maritime Authorities, which can lead to fines or even criminal charges against the Vessel crew. 
 
+The problem of this current methodology for Anomaly Detection, is that is extremely inefficient. Human analysis only allows a limited number of Vessels that can be analyzed. This problem is aggravated as the number of Vessel at seas is increasing every year in a exponential rate. 
 
-that each and it can affect the performance of the methods used, as low transmissions frequency reduce the number of points in a Vessel Route  
-
-via the Marisa Project, being For this work, two main sources of AIS data were used: Historical Data-Bases and NMEA live feed of Data. 
-
-\subsection{Track Definition}
+Although as described in Chapter X TODO, Vessel Anomalous Behavior can be quite difficult to formalize empirically. As any possible Anomaly can be caused by a undetermined number of causes, creating a uncertainty that only Maritime Knowledge Experts can assess and determine the truenes of any generated anomaly. Thus, in order to surpass the problem of the definition  an Anomaly, Expert Knowledge from Maritime Experts was accesed under the MARISA project. which firstly was identified what actions would be considered Anomalous 
 
 
 
-\section{Data-Set creation} %This was made for FCD subject, 2306 -> this is old... 
+\chapter{Initial Data-Set Creation} %This was made for FCD subject, 2306 -> this is old... 
 
 %\todo[inline]{annotations +  table different sources of data bases}
 The initial AIS database was created from a open-source AIS provided by U.S. coastal waters, ~\cite{MarineCadastre}. The raw database file dbf was downloaded, and transformed to a csv, with the use of a open-source GIS software (QGIS). 
@@ -84,7 +132,7 @@ The chosen area, represents data whose longitude is from -120 to -126 and latitu
 
 
 \section{Route Representation}
-Representing the data of a vessel trajectory, can become a difficulty in the Maritime domain. There are a vast number of techniques described in the literature.
+Representing the data of a Vessel trajectory, can become a difficulty in the Maritime domain. There are a vast number of techniques described in the literature.
 
 A effective way to represent a trajectory in the Maritime domain, is to look to the trajectory as a whole, this is, as vessel are obliged to broadcast their AIS information in a semi-continuous rates; knowing that each AIS broadcast message represent the instantaneous kinematic information from a single vessel, aggregating this information over time will represent a vessel trajectory. Therefore, knowing the MMSI of a vessel, a trajectory can be considered as the set of AIS messages broadcast, by that vessel, identified by the MMSI.
 
