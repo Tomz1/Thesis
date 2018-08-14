@@ -1,38 +1,81 @@
-\chapter{Methods and Systems Developed}
+\chapter{Modular Anomaly Detection Framework}
 \label{chapter:Chapter 3}
 \lhead{Chapter 3. \emph{Methods and Systems Developed}}
 
-In this Chapter, we present the developed Framework, Firstly by describing the overall view of the proposed Modular Framework, Secondly we provide a detailed explanation of each Module and the methods used for each Module. The modular Framework is proposed, as there are no defined inputs or outputs standards on the Maritime domain, so by defining a Framework that permits a flexible system, allows a easier adoption of these services by Maritime end users. 
+In this Chapter, we present the proposed Modular Anomaly Detection Framework. Firstly list the actual requirements that served as a blueprint for the developed Framework. This requirements were either defined by Maritime Officer Experts under the MARISA project, or from limitations from the Data either from the  
+
+Second we show the proposed Modular Anomaly Detection Framework, as shown in Fig. XX. And in the following sections we provide a overall explanation of each module functionality. 
+
+by describing the overall view of the proposed Modular Framework, Secondly we provide a detailed explanation of each Module and the methods used for each Module. 
+
+\section{Framework Requirements}
+\label{section: Framework Requirements}
+In order to develop a framework that will addresses the real demands of Maritime Officers, we surveyed the only agents that could significantly insight Maritime Officers under the MARISA project. in order to fully understand the demands for a Framework for Maritime Anomaly Detection.
+This being said, for the defined requirements we categorized them into three main classes:
+
+\begin{description}
+\item[Anomalies Requirements] Having the concept of Behavioural Vessel Anomaly defined by Maritime Officers is the most reliable way to define an anomaly at Seas. Therefore, Maritime Officers defined a list of Anomalies, in which we developed methods to detect those anomalies. 
+
+Being the one truly viable method to define of the methods we used to detect anomalies in the data, 
+sequence of features is transformed into a feature vector, then convectional classification methods are applied. Feature selection represents is an important task for this method of classification.
+
+\item [Functional Requirements] As the developed Framework was implemented so it could be used by Maritime Authorities, it was completely mandatory that the Framework could be not only deployed in different environment, but also completely modular and scallable; as different Maritime Authorities have different requirements. 
+not controlled by us.
+
+\item [Data Requirements] This requirements, were the class of requirements were not so obvious to classify. Any Framework that deals with Maritime data, is certain that it needs to be implemented so it can handle really high workflows of data, due to the increasing volume of Vessels at Seas. Although, Maritime is represented by different types of data from Meteo data to AIS data to even Fishing logs data, which come in different structures, or even with no structure at all.
+\end{description}
+
+\todo[inline]{NEED A TABLE OR SOMETHING WITH THE ACTUAL REQUIREMENTS}
+
 
 \section{Proposed Framework}
-In order to develop a system capable of addressing the objectives proposed in chapter 1[TODO - REF FOR OBJECTIVES], we propose a Modular Vessel Anomaly Detection Framework, based on a Lambda Architecture, and having the Apache Ecosystem. composed from four main modules, as shown in Fig. XX ...
+In order to develop a Framework capable of addressing the requirements defined, above in \ref{section: Framework Requirements}, we propose a Modular Vessel Anomaly Detection Framework, able to ingest data from different feeds in real-time data, construct a Data-Base for Vessels Trajectories in a unsupervised manner, and detect different Anomalies over either real-time incoming data or stored Vessels Trajectories; as it is represented in \ref{fig:Framework}.
+
+We provide a Modular Framework, as there are no inputs or outputs absolute standards nor defined requirements for any Framework for Anomaly Detection on the Maritime domain, so by providing a configurable and specially not static Framework, we provide the flexibility for providing the same Framework configured for different scenarios or even different National Maritime Authorities.
+
+as the requirements for one so by defining a Framework allows a flexible configuration from either types of Anomalies, system, allows a easier adoption of these services by Maritime end users. 
+
+on a Lambda Architecture, and having the Apache Ecosystem. composed from four main modules, as shown in Fig. XX ...
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = .25]{figures/UTE.png}
-    \caption{Proposed Beta Framework[TODO NEEDS MORE DETAIL THIS IMAGE].}
-    \label{fig: Framework}
+	\includegraphics[scale = .37]{figures/Ch3/Framework.pdf}
+    \caption{Proposed Beta Framework \todo[inline]{NEEDS MORE DETAIL THIS IMAGE}.}
+    \label{fig:Framework}
 \end{figure}
 
 In the following subsections, we discuss each module: Data Fusion, Vessel T Extraction, Anomaly Detection and Reporting...
 
-\section{Data}
-This section we provide a description, of the different types of Data used and respective sources used. AIS data type was the main source of data for this work, AIS is not-only the most available type data (being the standard for the Maritime positional data), but it was also the data type made available inside the MARISA project.
+\section{Data Ingestion}
+Data Ingestion Module, represents the Data input for the developed Framework. AIS data was the most representative data type used for this work, as it showcases the actual instantaneous Vessel information.
+Although, used AIS data for this work came in two really distinct formats: It came either in \textbf{Historical Batches} representing Historical sets of Data, or real \textbf{NMEA AIS Streams}, representing real, real-time 
+data.
 
-AIS Historical data can be found in open-access repositories, although AIS Data providers cap the frequency of the messages transitions. This drastically reduces the number of transmitted messages, but also reduces the overall detail of the Data, as lower transmissions rates produce a less certainty of the movement presented by each Vessel. For most general use cases of AIS (e.g. managing a fleet, estimations of time of arrival ...), transmissions rates of 3 Seconds or 30 Seconds, do not provide no information gain, as Vessel kinematics tend to not have abrupt changes, in short periods of time. 
+AIS Historical Data-Sets, can be found in open-access repositories, although Historical AIS Data providers cap the frequency of the messages transitions. This drastically reduces the number of transmitted messages, but also reduces the overall detail of the Data, as lower transmissions rates produce a less certainty of the movement presented by each Vessel. Which, for most general uses of AIS (e.g. managing a fleet, estimations of time of arrival ...), transmissions rates of 3 Seconds vs 30 Seconds, do not provide any information gain, as Vessel kinematics tend to not change abruptly in short periods of time. 
 
-Although, via the MARISA project, we received AIS data via live feeds from Antennas all around the European coast. This Antennas receive the Vessels transmissions broadcast via AIS, till normally a range of 20 Nautical Miles of the shore. The MARISA Live Feeds permit a live test scenario for the proposed Framework, as the live data ingestion of these feeds will represent real case scenarios where the Framework will be Tested.
+Although, via the MARISA project, we received AIS data via live feeds from Antennas all around the European coast. This Antennas receive the Vessels transmissions broadcast via AIS, till normally a range of 20 Nautical Miles of the shore and depending on the live feed provider, AIS messages can be received in rates up to 30 Messages per Minute per Vessel. This type of incoming Data Streams represents the Real scenario, in which the Framework will be tested. Real live streams of AIS data, are received via TCP stream in NMEA format which in order to be represented as AIS messages required to be decoded, which is described in the subsection under.
 
-\subsubsection{Live Data Feeds}
+
+\subsection{NMEA Data Streams}
 National Marine Electronics Association (NMEA) is a standard communication protocol used by Maritime Sensors such as Accelerometer, Giroscope, GPS receivers, etc.
-NMEA being the standard it is the protocol that encapsulates the AIS information, broadcasted by AIS-equipped Vessels. 
+NMEA encapsulates the information from the different Vessel sensors, and broadcasts this information
 
-TODO SAME AS IN TOP ITS BS
+being the standard it is the protocol that encapsulates the AIS information, broadcasted by AIS-equipped Vessels. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = .5]{figures/Ch3/NMEAexample.png}
+    \caption{Snapshot of raw AIS data in NMEA format.}
+    \label{fig:NMEAexample}
+\end{figure}
+
+\todo[inline]{TODO SAME AS IN TOP ITS BS}
 
 Via the project, we had access to multiple live NMEA feeds, as a way to not only validate our developed methods with live feeds of Nautical data, but also to produce methods that were capable of handling the scale of data that is produced by National feeds.
 
+The use of real data comes with many challenges, as it is mandatory to decode sort and store this data in order to de accessed as a viable source of data; a snapshot of a example of a NMEA feed can be found in Figure \ref{fig:NMEAexample}. 
 
-TODO this might go to chap4
+\todo[inline]{this might go to chap4}
 
 AIS-Receiving stations receive the broadcast AIS information from numerous AIS-equipped Vessels simultaneously. Normally, AIS-Receiving stations are antennas located along the coast line in high grounds, the reception range of these antennas vary, mainly depending on distance to shore, the elevation in which the antenna is located, and the antenna type itself.
 
@@ -41,170 +84,108 @@ Although, the distance in which Stations are capable of receiving AIS messages p
 \begin{enumerate}
 \item Duplication of Reception:  With the variation of reception ranges, it frequently occurs that multiple stations, receive the same  
 
-TODO - THIS BRINGS TO THE PROBLEM OF MULTIPLE ANTHENAS RECEIVING THE SAME FEED
+\todo[inline]{THIS BRINGS TO THE PROBLEM OF MULTIPLE ANTHENAS RECEIVING THE SAME FEED... disse que havia dois problemas}
 
-
-\item [TODO] disse que havia dois problemas
 \end{enumerate}
 
+\subsection{Data Storage}
+With NMEA streams producing enormous workflows of data, the storage of becomes a problem for the developed Framework, as it must not only decode and process the NMEA feeds but also store the decoded messages, in a "very fast" and scalable way.
 
-\section{TODO TOPICS}
-DADOS
+Thus, and as requirement of the MARISA project was to use Apache Spark [REF FOR APACHE SPARK] modules for data-ingestion and pre-processing, we decided to use Apache Cassandra as the Data-Storage for the proposed framework.
 
-PRE PROSS
-
-FEATURE EXTRACTION
-
-ARMAZENAMENTO -> CASSANDRA
-
-ANOMALIAS TODA A DEFINICAO 
-- FAZER AS QUE TENHO JA...
+technology has provides a lightweight solution for storage of enormous flows of Data, but also 
+enoumoit stacks well with Apache Spark...
 
 
-\section{Unsupervised Vessel Route Extraction}
-Representing a Vessel trajectory data, can become a difficulty in the Maritime domain. There are a vast number of solutions described in the literature, which present different solutions for different types of problems. 
+the report anomalies, it made the choose of A
 
-A scalable method to represent a trajectory in the Maritime domain, is to look to the trajectory as a whole, this is, as Vessel are obliged to broadcast their AIS information in a semi-continuous rates; knowing that each AIS broadcast message represent the instantaneous kinematic information from a single vessel, aggregating this information over time will represent a vessel trajectory. 
+of choosing a technology that can Store this information in a not only 'very fast' way but also storage of this Data after is processed 
 
-Thus, by identifying each vessel by its MMSI, a trajectory can be considered as the set of AIS messages, identified by the MMSI of each vessel. As each AIS message is time-stamped(contains the time in which was broadcast), our representation of trajectory can be defined as Multivariate Time-Series, this is for each trajectory we have $N$ time-series, in which $N$ represents the number of features considered for each trajectory, further explained in the subsection bellow.
+\section{Data Pre-processing}
+Data Pre
+\section{Feature Engineering}
+Feature Engineering presents a crucial step for any machine learning project, as selecting the right features that better represent the data, directly influences any result generated by the model.  
+As described in Section \ref{subsection: chp2_AIS}, AIS presents a large amount of different features. This creates a problem of estimating the use-fullness of each feature provided in by the AIS, as it requires a pre-conceived knowledge of the used data, that is only acquired with the experience in the Maritime domain.
 
-\subsection{Feature Extraction}
-AIS data, described in TODO chapter X TODO, presents different possibilities  analysis, as it contains detailed information the actual Vessel Behaviour. Although for this work we focused, on the information that more characterize the Vessel kinematics behaviour, thus decreasing the number of features we have in our Data-Model.
+Thus for this Framework, the choice of most suitable features that represent a Vessels movement was based on the literature and with the help of Maritime Knowledge Expert. Which lead to the choice of the features that solely represent the Vessels kinematics.
 
+We further enrich our features in two ways, firlty by analyzing each AIS message as point aas a single point in Time and calculating aditional distances, such as distance to shore and distance to the most near Port.
 
+each point in t the represented features of each message by by doing a point based analysis, in which we concidered the information of  
 
-The choice of this features was done with the help of Maritime Knowledge Expert, ... TODO TODO ...
+by normalizing the Latitude and Longitude features of each position, calculating the Distance to Shore and the kinematic features that represent the instantaneous move-state of the Vessel. Every calculation is done a priory, thus enhancing the performance and reliability of the Anomaly Detection Modules, which are explained in detail in section \todo{REF TO SECTION!}
+
+% \section{Unsupervised Vessel Route Extraction}
+\section{Vessel Trajectory Definition}
+In this Section we present our definition our interpretation and formulation of Vessel Trajectory, 
+Representing a Vessel Trajectory data, can become a difficulty in the Maritime domain. Currently there are a vast number of solutions described in the literature, presenting different solutions for different types of problems. 
+
+Our approach to represent a Maritime trajectory, was to consider a trajectory as a whole, this is, as Vessel are obliged to broadcast their AIS information in a semi-continuous rates; knowing that each AIS broadcast message represent the instantaneous kinematic information from a Single Vessel, aggregating this information over time will represent a Vessel Trajectory. 
+
+Thus, by identifying each vessel by its unique identifier (MMSI), the trajectory can be considered as the set of AIS messages, identified by the MMSI of each Vessel.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = .3]{figures/Ch3/traj_example.png}
+    \caption{Trajectory snapshot(2017-11-05 10:22 to 2017-11-05 22:42) from Vessel MMSI: 255806006}
+    \label{fig: TrajectorySMM_example}
+\end{figure}
+
+Although, as each AIS message is time-stamped(contains the time in which was broadcast), our representation of trajectory can be defined as Multivariate Time-Series, this is for each trajectory we have $N$ time-series, in which $N$ represents the number of features considered for each trajectory, further explained in the subsections bellow.
+
+\subsection{Feature Engineering}
+Feature Engineering presents a crucial step for any machine learning project, as selecting the right features that better represent the data, directly influences any result generated by the model.  
+As described in TODO chapter X TODO,  AIS presents a large amount of different features. This creates a problem of estimating the use-fullness of each feature provided in by the AIS, as it requires a pre-conceived knowledge of the used data. 
+
+Thus, for this work the choice of most suitable features that represent a Vessels movement was done with the help of Maritime Knowledge Expert. Which lead to the choice of the features that solely represent the Vessels kinematics.
+
+which directly increases or decreases the complexity of the  is not a trivial task, it requires a pre-conceived knowledge of the used data, and more important expectation of the    as not every feature has the same relevancy, thus 
+
+ant for the 
+
+the problem by having an enormous amount of features,  is that the estimation of the usefulness of the features 
+
+it most of these features donot represent any which might bring 
+
+a presents different possibilities analysis, as it contains detailed information the actual Vessel Behaviour. Although for this work we focused, on the information that more characterize the Vessel kinematics behaviour, thus decreasing the number of features we have in our Data-Model.
+
+\subsection{Multivariate Time-Series Analogy}
+As mentioned above, each Trajectory is considered as a Time Series composed of Multiple features.  
+
+in Fig. \ref{fig: MTimeSeries_example}, we represent the Vessel trajectory showend in figure X. 
+For each trajectory we consider the features representing 
+main features that a which in order to normalize our analysis of a Vessel Route, we ...
+\todo[inline]{TODO dar palha para introduzir esta imagem}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = .5]{figures/Ch3/ts_example.png}
+    \caption{Trajectory represented in Fig.X, presented as a Multivariate Time Series.}
+    \label{fig: MTimeSeries_example}
+\end{figure}
+
 
 \section{Anomaly Definition}
-Nowadays, Vessel abnormal Behaviour is solely analysed by Human Maritime Experts, this is, every Maritime Security Agency assures the coastal surveillance of their territory, by assessing possible threats, and identifying abnormal behaviour. The abnormal Vessel behaviour is then further investigated by Maritime Authorities, which can lead to fines or even criminal charges against the Vessel crew. 
+An Anomaly can have numerous interpretations depending on the context in which is found, but it can be generally defined as Data that stand out when contrasted to other Data.
 
+Nowadays Vessel Anomaly Detection is solely done by Human Maritime Experts, with every Maritime Security Agency assuring the coastal surveillance of their territory, by assessing possible threats, and identifying abnormal behaviour. 
+%The identified abnormal Vessel behaviour is then further investigated by Maritime Authorities, which can lead to fines or even criminal charges against the Vessel crew. 
 The problem of this current methodology for Anomaly Detection, is that is extremely inefficient. Human analysis only allows a limited number of Vessels that can be analyzed. This problem is aggravated as the number of Vessel at seas is increasing every year in a exponential rate. 
 
-Although as described in Chapter X TODO, Vessel Anomalous Behavior can be quite difficult to formalize empirically. As any possible Anomaly can be caused by a undetermined number of causes, creating a uncertainty that only Maritime Knowledge Experts can assess and determine the truenes of any generated anomaly. Thus, in order to surpass the problem of the definition  an Anomaly, Expert Knowledge from Maritime Experts was accesed under the MARISA project. which firstly was identified what actions would be considered Anomalous 
+This creates a typical situation for the use of Machine Learning models to aid the necessities of Maritime Experts.
+%, in the field of Maritime Anomaly Detection.
+Although, formalizing an Vessel Anomalous Behavior is extremely difficult, as it is not clear what is Anomalous in the when only analyzing the Maritime data, and there is no available historical Anomalous Data-Set, to the best of our knowledge.
+
+To solve this problem of the defining Vessel Abnormal Behaviour, Expert Knowledge from Maritime Experts was accessed under the MARISA project. Maritime Experts in order to define Anomalies which could be formalized, provided a list of Vessels Anomalies which behaviour. firstly a list of  
 
 
 
-\chapter{Initial Data-Set Creation} %This was made for FCD subject, 2306 -> this is old... 
+%It is impossible to define Anomalous, when only   
 
-%\todo[inline]{annotations +  table different sources of data bases}
-The initial AIS database was created from a open-source AIS provided by U.S. coastal waters, ~\cite{MarineCadastre}. The raw database file dbf was downloaded, and transformed to a csv, with the use of a open-source GIS software (QGIS). 
- 
-Before the download of the data-set it was important to select one area of more interest, as dbf to csv transformations are time consuming, and the a decent sized data-set, was achieved with just one area.
+%any Vessel Anomaly can be caused by a undetermined number of factors,      . 
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale = .35]{figures/UTMZoneMap2014.png}
-    \caption{Index map of UTM zones}
-    \label{fig: UMT zones}
-\end{figure}
+Thus, the context and causes of every Anomaly needs defined by Maritime Experts. Thus, in order to surpass the problem of the definition of an Anomaly; Expert Knowledge from Maritime Experts was accessed under the MARISA project. Maritime Experts defined, firstly a list of  
 
-The initial selected zone, was zone 10. This zone represents the west coast of the United States, as it is shown in Figure ~\ref{fig: UMT zones}.
-The chosen area, represents data whose longitude is from -120 to -126 and latitude is from 30 to 50, from a considerable amount of ships.
-
-%http://www.marinecadastre.gov/ais/
-
-\section{AIS Data}
-\label{section: AIS Data}
- With the recent introduction of AIS in the Maritime domain the volume of vessel positional data as exponentially increased, a detailed description of this data, is found in section ~\ref{subsection: chp2_AIS}.
-
-\begin{table}[H]
-  \centering
-{\small
-\begin{tabular}{lrrrrrl}
-\toprule
-{} &       MMSI &           X &          Y &   SOG &        COG &                Time \\
-\midrule
-0 &  636081210 & -125.993218 &  48.355773 &  14.3 &  73.300003 & 2014-02-27 13:33:02 \\
-1 &  636081210 & -125.985303 &  48.357340 &  14.5 &  73.800003 & 2014-02-27 13:34:23 \\
-2 &  636081210 & -125.979437 &  48.358500 &  14.6 &  73.099998 & 2014-02-27 13:35:23 \\
-3 &  636081210 & -125.973353 &  48.359692 &  14.7 &  73.000000 & 2014-02-27 13:36:25 \\
-4 &  636081210 & -125.965440 &  48.361318 &  15.0 &  73.000000 & 2014-02-27 13:37:46 \\
-5 &  636081210 & -125.956733 &  48.363067 &  15.3 &  73.900002 & 2014-02-27 13:39:11 \\
-6 &  636081210 & -125.950430 &  48.364153 &  15.7 &  76.099998 & 2014-02-27 13:40:11 \\
-7 &  636081210 & -125.944108 &  48.365310 &  15.7 &  74.000000 & 2014-02-27 13:41:10 \\
-8 &  636081210 & -125.937763 &  48.366510 &  15.9 &  73.900002 & 2014-02-27 13:42:12 \\
-9 &  636081210 & -125.931385 &  48.367660 &  15.9 &  75.000000 & 2014-02-27 13:43:11 \\
-\bottomrule
-\end{tabular} }
-\caption{Example of AIS data transmitted by Vessel, MMSI: 636081210}
-\label{Table: TableAIS1}
-\end{table}
-
-
-\section{Route Representation}
-Representing the data of a Vessel trajectory, can become a difficulty in the Maritime domain. There are a vast number of techniques described in the literature.
-
-A effective way to represent a trajectory in the Maritime domain, is to look to the trajectory as a whole, this is, as vessel are obliged to broadcast their AIS information in a semi-continuous rates; knowing that each AIS broadcast message represent the instantaneous kinematic information from a single vessel, aggregating this information over time will represent a vessel trajectory. Therefore, knowing the MMSI of a vessel, a trajectory can be considered as the set of AIS messages broadcast, by that vessel, identified by the MMSI.
-
-
-Thus, a possible definition for a vessel trajectory is a, set of multidimensional-points represented as:
-\[TR_{MMSI} = p1, p2, p3, p4, \cdots , pn\]
-
-Where each multidimensional point $p$ is defined as:
-\[p = [t, x, y, SoG, CoG]\]
-
-
-%\todo[inline]{ TODO SE FALTAR DADAS A INTERPOLAÇAO REALIZADA}
-
-
-%for the Representation of MMSI as a track initially, then the assumption... interpolation of missing SOG and COG values. The use of Haversine formula, justify with as vessel motion is linear and no sudden speed exchanges or route exchanges tend to occur in secounds in the marite traffic, so this .
-
-\section{MARISA Requirements}
-\subsection{AIS Signal Loss}
-Ships equipped with AIS are obliged to keep the AIS autonomously transmitting AIS messages. A way that ships illegally hide their position and possible what the ships is doing objectively, is by switching off the AIS, or finding ways to block the communications of the AIS transmitter with the coastal receivers.
-
-This creates a problem in the maritime domain, has maritime authorities are constantly finding new ways to discover this illegal activities. A method that looks into historical or new streams of data, was developed. 
-
-This method efficiently uses Data Wrangling techniques, in witch with the aid of powerful Python libraries such as Pandas and Data-Frames, the vessels that don't transmit any information for a parametrized time period, are detected and can be reported for maritime authorities for future investigation.
-
-In table ~\ref{Table: AIS signal loss}, results from the above described method are presented, for this work were conducted on a sub-set of the main data-set, that is, from 50 vessel trajectories, which represents 50,000 AIS messages.
-
-\begin{table}[H]
-\centering
-\caption{Example of the results, obtained for AIS signal loss, with 50 Ships subset.}
-\label{Table: AIS signal loss}
-\begin{tabular}{@{}lllll@{}}
-\toprule
-MMSI & X & Y & Time & Signal Loss Time \\ \midrule
-316007330 & -125.990797 & 48.867373 & 2014-02-23 21:43:21 & 18 days 13:53:16 \\
-316199201 & -123.375432 & 48.430820 & 2014-02-13 12:26:36 & 11 days 08:18:25 \\
-338670018 & -121.378175 & 37.977128 & 2014-02-08 20:18:29 & 7 days 20:06:22 \\
-367556504 & -122.495912 & 37.869303 & 2014-02-10 20:45:48 & 7 days 01:57:47 \\
-... & ... & ... & ... & ... \\
-311240050 & -121.781132 & 30.241660 & 2014-02-06 03:15:42 & 0 days 00:18:39 \\
-311240012 & -121.725685 & 30.196453 & 2014-02-08 07:34:12 & 0 days 00:08:30 \\ \bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Vessel Rendezvous}
-A requirement imposed by the MARISA project, was the development of services, able to detect and generate alarms when two or more vessels are approaching close to each other. This in the maritime world can be called as rendezvous.
-
-The concept of rendezvous in the Maritime world is quite complex, as there are numerous legislation. For the purpose of this work, and because the emphasis is on the alarm generation of possible rendezvous, a simplification of this definition is assumed, therefore: 
-
-~\textbf{Vessel Rendezvous}, for this work is considered as the interception or closeness of two or more vessels, in a configurable time period.
-
-An algorithm was developed in which the a distance ~\textbf{d}, is given as a parameter. For every single Vessel Track, the track is partitioned into time-groups(e.g. a time-group of 5min), ~\textbf{t}, defined also as a parameter. If two or more Vessels, are in the same ~\textbf{t} with a distance smaller than ~\textbf{d}, an alarm is generated for those two vessels.
-
-Figure~\ref{fig: VesselRendevouz2d}, shows two different Vessel Routes, with the axis representing the X and Y coordinate, respectively.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale = .8]{figures/VesselRendevouz2d}
-    \caption{Two vessel routes}
-    \label{fig: VesselRendevouz2d}
-\end{figure}
-
-While is obvious that the routes are similar in a positional way, they occur at different times, as is can be see in the figure ~\ref{fig: VesselRendevouz3d} .
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale = .9]{figures/VesselRendevouz3d}
-    \caption{Two vessel routes, time on Z-axis}
-    \label{fig: VesselRendevouz3d}
-\end{figure}
-
-
-   
 
 
 

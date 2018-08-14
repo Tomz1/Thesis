@@ -28,7 +28,7 @@ The main motivation for the adoption of the AIS was its autonomous ability to id
 
 In 2000, the IMO adopted a new requirement for all ships, to carry an automatic identification system (AIS) that automatically provides the vessel information to coastal authorities and other vessels.
 
-This regulation was initially imposed for all international ships with a 300 gross tonnage or more, and for ships with 500 gross tonnage and upwards navigating not international voyages.After 31 of March 2014 all EU fishing vessels, above 15m are obliged by the European Commission to install an AIS, ~\cite{EC2018}
+This regulation was initially imposed for all international ships with a 300 gross tonnage or more, and for ships with 500 gross tonnage and upwards navigating not international voyages. After 31 of March 2014 all EU fishing vessels, above 15m are obliged by the European Commission to install an AIS, ~\cite{EC2018}
 
 The ships information sent over the AIS, is classified into three main categories, they are presented in table:
 \begin{table}[H]
@@ -64,7 +64,7 @@ Ships fitted with AIS are obliged to maintain the AIS in operation at all times.
 
 
 \section{Behaviour Analysis}
-Behaviour Analysis, is a vastly researched topic that involves many research fields. A vast number of Frameworks with the main objective of Maritime Behaviour Analysis are proposed in the literatures, some of these frameworks are presented in section ~\ref{section: Similar Frameworks}.
+Behaviour Analysis, is a vastly researched topic that involves many research fields. A vast number of Frameworks with the main objective of Maritime Behaviour Analysis are proposed in the literature's, some of these frameworks are presented in section ~\ref{section: Similar Frameworks}.
 
 For this work vessel behaviour is as considered as a baseline in witch abnormal behaviour can be found. This baseline occurs as normal trajectories are various and constant, producing a normalcy model of vessels dynamics in which Machine Learning Techniques can learn.
 
@@ -79,7 +79,7 @@ The authors in ~\cite{Pallotta2013}, introduced the framework TREAD(Traffic Rout
 
 A framework for vessel behaviour analysis focusing on vessel interaction or rendezvous. The proposed framework, is divided into the following three logically connected phases: Engagement Detection, Scenario  Detection and Anomaly Detection. The use of the 3-phase framework serves as a filter to reduce the volume of data that is processed by the sub-sequential phase. Therefore prioritizing critical scenarios, that request human intervention ~\cite{Shahir2015}.
 
-Although acessing the performance of the frameworks, is an ardous task. There is no defined benchmark set where tests can be performed, with labeled samples described as positives or negatives of what are considered anomalies at seas ~\cite{Laxhammar2008}. 
+Although acessing the performance of the frameworks, is an ardours task. There is no defined benchmark set where tests can be performed, with labeled samples described as positives or negatives of what are considered anomalies at seas ~\cite{Laxhammar2008}. 
 
 In~\cite{Mao2016}, a detailed solution for constructing an AIS database, with the potential value for being used as benchmark database for maritime trajectory learning, and efficiency testing of data mining algorithms.
 
@@ -117,7 +117,7 @@ These last representation is quite important for the Maritime domain, as the dis
 \section{Time Series}
 \label{section: Time Series}
 The concept of time series is related to trajectories, as a time series is a set of ordered observations on a a quantitative characteristic of a
-phenomenon at spaced time period, ~\cite{Ivanovic2016b}. Formally, a univariate time series $xj$, is defined as a sequence of real numbers, where $n$ is the length of the series, represented as:
+phenomenon at spaced time period, ~\cite{Ivanovic2016b}. Formally, a uni-variate time series $xj$, is defined as a sequence of real numbers, where $n$ is the length of the series, represented as:
 
 \[xj = \left \{ x(i) \in \mathbb{R}: i = 1,2,3,...,n \right \} \]
 
@@ -125,7 +125,7 @@ phenomenon at spaced time period, ~\cite{Ivanovic2016b}. Formally, a univariate 
 
 
 \subsection{Multivariate Time Series}
-The AIS data cannot be described as a univariate times series, as it is composed by various variables. Therefore AIS data needs to be analysed as a Multivariate Time Series (MTS).
+The AIS data cannot be described as a uni-variate times series, as it is composed by various variables. Therefore AIS data needs to be analyzed as a Multivariate Time Series (MTS).
 For each AIS message, the features can be extracted with the timestamps that the message was broadcast. A detailed description of the AIS features is found in section ~\ref{subsection: chp2_AIS}. 
 
 A possible representation of a Multivariate Time Series, $X$ is:
@@ -182,7 +182,8 @@ Three main categories of sequence time series classification, are defined by the
 \item [Distance Based Classification] The distance function that measures the
 similarity between the time series, induce the quality of the classification overall. A more detailed research on these distances is presented in \cite{Knorr2000}.
 
-\item [Model Based Classification] Where models, such as multivariate Gaussian mixture model (GMM) ~\cite{Laxhammar2008}, support vector machines (SVM) or hidden Markov models (HMM) and other statistical models are used to classify time series.
+\item [Model Based Classification] Where models, such as multivariate Gaussian mixture model (GMM) ~\cite{Laxhammar2008}, Support Vector Machines (SVM) or Hidden Markov Models (HMM) and other statistical models are used to classify time series.
+
 \end{description}
  
 
@@ -193,10 +194,10 @@ A distance is defined as a numerical measurement, that measures how far two obje
 
 The similarity between two time series, can be calculated by simply summing the ordered point-to-point squared distance between both time series, this is shown in figure ~\ref{fig:EuclidianDTW}. 
 
-Although, euclidian distance betwhen two time seris can only be calualted if, both time series are of equal length, ~\cite{EuclidianRef}. 
+Although, euclidean distance between two time series can only be calculated if, both time series are of equal length, ~\cite{EuclidianRef}. 
 If two time series are identical, but one is shifted slightly along the time axis, using the Euclidean distance, it may consider the time series very different from each other, ~\cite{Salvador2007}.
 
-This creates a problem when analysing certain type of time series, as both may not have them same length, or might just be time-shifted, which happens when analysing AIS data. In the literature a few solutions are presented, one of them is using another distance measure. 
+This creates a problem when analyzing certain type of time series, as both may not have them same length, or might just be time-shifted, which happens when analyzing AIS data. In the literature a few solutions are presented, one of them is using another distance measure. 
 
 \begin{figure}[H]
 	\centering
@@ -207,7 +208,7 @@ This creates a problem when analysing certain type of time series, as both may n
 
 
 \subsection{Dynamic Time Warping (DTW)}
-Dynamic time warping (DTW) is a algorithm that computes the optimal alignment and distance between two time series, ~\cite{Seto2015}. One time series may be “warped” non-linearly by stretching or shrinking it along its time axis.
+Dynamic Time Warping (DTW) is a algorithm that computes the optimal alignment and distance between two time series, ~\cite{Seto2015}. One time series may be “warped” non-linearly by stretching or shrinking it along its time axis.
 %[GET A BETTER REF FOR THIS, NOT SALVADOR].
 
 Although computing the DTW between two time series, is quite computationally expensive, has it's time and space complexity is $O(N^2)$, that limits its usefulness to only small time series with no more than 1000 points, ~\cite{Salvador2007}. 
