@@ -89,30 +89,3 @@ MMSI & X & Y & Time & Signal Loss Time \\ \midrule
 \bottomrule
 \end{tabular}
 \end{table}
-
-\subsection{Vessel Rendezvous}
-A requirement imposed by the MARISA project, was the development of services, able to detect and generate alarms when two or more vessels are approaching close to each other. This in the maritime world can be called as rendezvous.
-
-The concept of rendezvous in the Maritime world is quite complex, as there are numerous legislation. For the purpose of this work, and because the emphasis is on the alarm generation of possible rendezvous, a simplification of this definition is assumed, therefore: 
-
-~\textbf{Vessel Rendezvous}, for this work is considered as the interception or closeness of two or more vessels, in a configurable time period.
-
-An algorithm was developed in which the a distance ~\textbf{d}, is given as a parameter. For every single Vessel Track, the track is partitioned into time-groups(e.g. a time-group of 5min), ~\textbf{t}, defined also as a parameter. If two or more Vessels, are in the same ~\textbf{t} with a distance smaller than ~\textbf{d}, an alarm is generated for those two vessels.
-
-Figure~\ref{fig: VesselRendevouz2d}, shows two different Vessel Routes, with the axis representing the X and Y coordinate, respectively.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale = .8]{figures/VesselRendevouz2d}
-    \caption{Two vessel routes}
-    \label{fig: VesselRendevouz2d}
-\end{figure}
-
-While is obvious that the routes are similar in a positional way, they occur at different times, as is can be see in the figure ~\ref{fig: VesselRendevouz3d} .
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale = .9]{figures/VesselRendevouz3d}
-    \caption{Two vessel routes, time on Z-axis}
-    \label{fig: VesselRendevouz3d}
-\end{figure}

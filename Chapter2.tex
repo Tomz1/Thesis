@@ -2,35 +2,35 @@
 \label{chapter:literatureReview}
 \lhead{Chapter 2. \emph{Literature Review}}
 
-Objectives for the MARISA project are well defined, in order to achieve the proposed goals and in preparation for this thesis a vast number of subjects were investigated. An investigation in the following theoretical topics : Behaviour analysis, Anomaly detection, Maritime safety technologies, were the major keyword for this literature review. 
+Objectives for the MARISA project are well defined. In order to achieve the proposed goals and in preparation for this thesis a vast number of subjects were investigated. An investigation in the following theoretical topics : Behaviour analysis, Anomaly detection, Maritime safety technologies, were the major keywords for this literature review. 
 
-In section \ref{section: Similar Frameworks} a analysis of the principal similar Frameworks found in the Literature will be presented.
+In section \ref{section: Similar Frameworks} an analysis of the principal similar Frameworks found in the Literature, will be presented.
  A brief introduction to the maritime domain, regarding the Maritime Safety affairs is presented in section \ref{section: Maritime Safety}. In subsection ~\ref{subsection: chp2_AIS}, a description of the AIS technology and its use in the Maritime domain is presented.
 
 \section{Maritime Safety}
 \label{section: Maritime Safety}
 
-Shipping is most likely, the most international task of all Worlds Industries, because of this international nature, it has long been recognized that improving maritime safety, is more effective if it is  carried out on a international level, rather than by individual countries acting unilaterally without any co-ordination, ~\cite{IMO2016}.
+Shipping is most likely, the most international task of all Worlds Industries, because of this international nature. It has long been recognized that improving maritime safety, is more effective if it is  carried out on a international level, than by individual countries acting unilaterally without any co-ordination, ~\cite{IMO2016}.
 
 The UN (United Nations) in 1948, established the International Maritime Organization (IMO), as the first and principal international organization devoted to maritime matters. 
 
-Since it's creation, the IMO has promoted the adoption of 50 conventions and protocols, adopting more than 1000 codes and recommendations regarding the maritime safety and security.
+Since it's creation, the IMO has promoted the adoption of 50 conventions and protocols. The IMO has adopted more than 1000 codes and recommendations regarding the maritime safety and security.
 
 The IMO objectives are easily summarized into their slogan : safe, secure, and efficient shipping on clean oceans.
 
 \subsection{Automatic identification system (AIS)}
 \label{subsection: chp2_AIS}
-While the maritime safety domain is a vast and complex field, for this investigation, it is important to focus on the technologies that the maritime domain has presented.
+While the maritime safety domain is a vast and complex field for this investigation, it is important to focus on the technologies that the maritime domain has presented.
 
-Automatic Identification System (AIS) is used to identify and locate vessels by electronically exchanging data over high frequency VHF radio bandwidth to, other nearby ships and Vessel Traffic Services (VTS) stations.
+Automatic Identification System (AIS) is used to identify and locate Vessels by electronically exchanging data over high frequency VHF radio bandwidth to, other nearby ships and Vessel Traffic Services (VTS) stations.
 
-The main motivation for the adoption of the AIS was its autonomous ability to identify other vessels assisting humans with the collision avoidance. It has the ability to detect other equipped vessel in situations where the radar detection is limited such as around bends, behind hills, and in conditions of restricted visibility by fog, rain, etc, ~\cite{Harati-Mokhtari2007}. 
+The main motivation for the adoption of the AIS was its autonomous ability to identify other Vessels assisting humans with the collision avoidance. It has the ability to detect other equipped Vessel in situations where the radar detection is limited such as around bends, behind hills, and in conditions of restricted visibility by fog, rain, etc, ~\cite{Harati-Mokhtari2007}. 
 
-In 2000, the IMO adopted a new requirement for all ships, to carry an automatic identification system (AIS) that automatically provides the vessel information to coastal authorities and other vessels.
+In 2000, the IMO adopted a new requirement for all ships, to carry an automatic identification system (AIS) that automatically provides the Vessel information to coastal authorities and other Vessels.
 
-This regulation was initially imposed for all international ships with a 300 gross tonnage or more, and for ships with 500 gross tonnage and upwards navigating not international voyages. After 31 of March 2014 all EU fishing vessels, above 15m are obliged by the European Commission to install an AIS, ~\cite{EC2018}
+This regulation was initially imposed for all international ships with 300 gross tonnage or more and for ships with 500 gross tonnage and upwards navigating not international voyages. After 31 of March 2014 all EU fishing Vessels above 15m, are obliged by the European Commission to install an AIS, ~\cite{EC2018}
 
-The ships information sent over the AIS, is classified into three main categories, they are presented in table:
+The ships information sent over the AIS is classified into three main categories, they are presented in table:
 \begin{table}[H]
 \centering
 \caption{AIS Information Description}
@@ -58,35 +58,35 @@ The ships information sent over the AIS, is classified into three main categorie
 \end{tabular}
 \end{table}
 
-Each vessel transmits specific information related to the vessel itself, the MMSI represents a 9 digit unique ID number, that every vessel is assign with.
+Each Vessel transmits specific information related to the Vessel itself, the MMSI represents a 9 digit unique ID number, that every Vessel is assign with.
 Most of the information sent over AIS, is automatically generated by the ships sensors such as the GPS and the compass. Thus minimizing the possibility of manipulate this data, although there is still information that is manually inserted by the crew such as the Navigational Status and the Heading.
 
 Ships fitted with AIS are obliged to maintain the AIS in operation at all times. The AIS autonomously broadcast information, every certain time interval, therefore ships ping their AIS information every time interval   There are international agreements, that protect the navigational information.
 
 
 \section{Behaviour Analysis}
-Behaviour Analysis, is a vastly researched topic that involves many research fields. A vast number of Frameworks with the main objective of Maritime Behaviour Analysis are proposed in the literature's, some of these frameworks are presented in section ~\ref{section: Similar Frameworks}.
+Behaviour Analysis, is a vastly researched topic that involves many research fields. A vast number of Frameworks with the main objective of Maritime Behaviour Analysis are proposed in the literature, some of these frameworks are presented in section ~\ref{section: Similar Frameworks}.
 
-For this work vessel behaviour is as considered as a baseline in witch abnormal behaviour can be found. This baseline occurs as normal trajectories are various and constant, producing a normalcy model of vessels dynamics in which Machine Learning Techniques can learn.
+For this work Vessel behaviour is as considered as a baseline in which abnormal behaviour can be found. This baseline occurs as normal trajectories are various and constant, producing a normalcy model of Vessels dynamics in which Machine Learning Techniques can learn.
 
-Anomalies don't necessarily mean that there is something abnormal with the ship vessel behaviour, that is something hard to imply with only AIS data. Anomalies in the AIS data can represent numerous abnormal events, some of them that can be Illegal, thus further investigation from maritime authorities is needed. 
+Anomalies don't necessarily mean that there is something abnormal with the ship Vessel behaviour. That is something hard to imply with only AIS data. Anomalies in the AIS data can represent numerous abnormal events. Some of them that can be illegal, that's why further investigation from maritime authorities is needed. 
 
 \subsection{Similar Frameworks}
 \label{section: Similar Frameworks}
 
-There are a vast number of frameworks in which vessel behavior analyses with the purpose of anomaly detection are fully defined as integrated systems. The authors in ~\cite{Lei2016} suggested the framework MT-MAD (Maritime Trajectory Modelling and Anomaly Detection), in which a given set of moving objects, the most frequent movement behaviour are explored, evaluating a level of suspicion hence detecting anomalous behaviour.
+There are a vast number of frameworks in which Vessel behavior will be analyze. This will be done with the purpose of anomaly detection which are fully defined as integrated systems. The authors in ~\cite{Lei2016} suggested the framework MT-MAD (Maritime Trajectory Modelling and Anomaly Detection), in which a given set of moving objects, the most frequent movement behaviour are explored, evaluating a level of suspicion hence detecting anomalous behaviour.
 
-The authors in ~\cite{Pallotta2013}, introduced the framework TREAD(Traffic Route Extraction and Anomaly Detection) is proposed in which an Unsupervised Route Extraction is used to create a statistical model of maritime traffic from AIS messages, in order to detect low-likelihood behaviours and predict vessels future positions.
+The authors in ~\cite{Pallotta2013}, introduced the framework TREAD (Traffic Route Extraction and Anomaly Detection). The framework is proposed in which an Unsupervised Route Extraction is used to create a statistical model of maritime traffic from AIS messages, in order to detect low-likelihood behaviours and predict Vessels future positions.
 
-A framework for vessel behaviour analysis focusing on vessel interaction or rendezvous. The proposed framework, is divided into the following three logically connected phases: Engagement Detection, Scenario  Detection and Anomaly Detection. The use of the 3-phase framework serves as a filter to reduce the volume of data that is processed by the sub-sequential phase. Therefore prioritizing critical scenarios, that request human intervention ~\cite{Shahir2015}.
+A framework for Vessel behaviour analysis focusing on Vessel interaction or rendezvous. The proposed framework, is divided into the following three logical connected phases: Engagement Detection, Scenario  Detection and Anomaly Detection. The use of the 3-phase framework serves as a filter to reduce the volume of data that is processed by the sub-sequential phase. Therefore prioritizing critical scenarios, that request human intervention ~\cite{Shahir2015}.
 
-Although acessing the performance of the frameworks, is an ardours task. There is no defined benchmark set where tests can be performed, with labeled samples described as positives or negatives of what are considered anomalies at seas ~\cite{Laxhammar2008}. 
+Although accessing the performance of the frameworks, is an ardours task. There is no defined benchmark set where tests can be performed, with labeled samples described as positives or negatives of what are considered anomalies at seas ~\cite{Laxhammar2008}. 
 
 In~\cite{Mao2016}, a detailed solution for constructing an AIS database, with the potential value for being used as benchmark database for maritime trajectory learning, and efficiency testing of data mining algorithms.
 
 A partition-and-detect trajectory in which trajectories are partitioned into a two-level of granularity achieving high efficiency and high quality trajectory partitions, therefore detecting outlier trajectories using density-based methods, ~\cite{Lee}.
 
-There are numerous studies that show how, vessels tend to alter their routes in order to achieve safe distances when passing near other vessel. In ~\cite{2017Offshore} a detailed study on Merchant vessels AIS data, presents how this type vessels alter their route, when new surface offshore petroleum installations are constructed.
+There are numerous studies that show how, Vessels tend to alter their routes in order to achieve safe distances when passing near other Vessel. In ~\cite{2017Offshore} a detailed study on Merchant Vessels AIS data, presents how this type Vessels alter their route, when new surface offshore petroleum installations are constructed.
 
 \section{Trajectories Analysis}
 \label{section: Trajectory Analysis}
@@ -104,16 +104,16 @@ Morris and Trivedi ~\cite{Morris2008}, further categorize trajectory learning as
 \item Path Modelling.
 \end{enumerate}
 
-In the Maritime domain, as vessels are free to navigate in open waters, this fact produces a specific level of uncertainty related to Vessel trajectories, there are no standards for vessel trajectory representation.
+In the Maritime domain, as Vessels are free to navigate in open waters, this fact produces a specific level of uncertainty related to Vessel trajectories, there are no standards for Vessel trajectory representation.
 
 A way to discretize a trajectory discovering frequent regions is presented in ~\cite{Lei2016}. Representing the trajectories in a spatial grid in which a cell represents a geographical area with a defined size.
 
-Pallotta, proposed a method that enriches the raw vessels tracks with a description of the ship movements. This is the raw trajectories are labelled with the vessel movement type information as 'Stationary' or 'Sailing' ~\cite{Pallotta2013}.
+Pallotta, proposed a method that enriches the raw Vessels tracks with a description of the ship movements. This is the raw trajectories are labelled with the Vessel movement type information as 'Stationary' or 'Sailing' ~\cite{Pallotta2013}.
 
 The authors in ~\cite{Lee}, raw trajectories are partitioned into sub-trajectories, creating a new insight for data analysis, adding the possibility of focused region analysis.  
 
 A framework for scene modelling using trajectory dynamics analysis, for the discovery of POIs(Point of Interest) and the learning of AP(Activity Path), ~\cite{Morris2008}. 
-These last representation is quite important for the Maritime domain, as the discovery of new POIs, can indicate the common vessel destinations (e.g. frequent fishing zones, ports, etc.).  
+These last representation is quite important for the Maritime domain, as the discovery of new POIs, can indicate the common Vessel destinations (e.g. frequent fishing zones, ports, etc.).  
 
 \section{Time Series}
 \label{section: Time Series}
@@ -160,7 +160,7 @@ Time Series Clustering can be categorized into three main general approaches, si
 \begin{itemize}
 \item \textbf{Raw-data-based approaches (a)} These approaches work with raw sets of data, normally in the time domain. 
 
-\item \textbf{Route Definition} Several methods of vessel route definition, are presented in~\ref{chapter:literatureReview}.
+\item \textbf{Route Definition} Several methods of Vessel route definition, are presented in~\ref{chapter:literatureReview}.
 Although, at this moment a method was chosen that represents the route as a whole. Therefore no information is lost, a detailed description of the latter is presented in~\ref{section: Trajectory Analysis}.
 
 \item \textbf{Model-based approaches} This is a more complex clustering technique, in which, each Time-Series is considered as a statistical model or as a mixture of statistical distributions, thus two time series are considered similar when the models that fit this distributions are similar. 

@@ -72,7 +72,7 @@ not controlled by us.
 \section{Proposed Framework}
 In order to develop a Framework capable of addressing the requirements defined, above in \ref{section: Framework Requirements}, we propose a Modular Vessel Anomaly Detection Framework, able to ingest data from different feeds in real-time data, construct a Data-Base for Vessels Trajectories in a unsupervised manner, and detect different Anomalies over either real-time incoming data or stored Vessels Trajectories; as it is represented in \ref{fig:Framework}.
 
-We provide a Modular Framework, as there are no inputs or outputs absolute standards nor defined requirements for any Framework for Anomaly Detection on the Maritime domain, so by providing a configurable and specially not static Framework, we provide the flexibility for providing the same Framework configured for different scenarios or even different National Maritime Authorities.
+We provide a Modular Framework, as there are no inputs or outputs absolute standards nor defined requirements for any System for Anomaly Detection on the Maritime domain, so by providing a configurable and specially not static Framework, we provide the flexibility for providing the same Framework configured for different scenarios or even different National Maritime Authorities.
 
 as the requirements for one so by defining a Framework allows a flexible configuration from either types of Anomalies, system, allows a easier adoption of these services by Maritime end users. 
 
@@ -188,7 +188,7 @@ in order to discovery new knowledge, it is important to
 
 
 \subsection{Anomaly Detection Service}
-ADS (Anomaly Detection Service) Module, represents in our architecture the more complex methods to Anomaly Detection, which runs in batches of data, making it only able to run in effective time opposed real-time. ADS works by querying data from the historical Trajectory Data-Base, with a configurable set of parameters, which can be time restrictive(such as the 10 past Hours) and or from a Vessel specific set of Vessels. This data is then fed to our Anomaly Detection Service Module, which were implemented to detect :
+ADS (Anomaly Detection Service) Module, represents in our architecture the module to Anomaly Detection, which runs in batches of data, making it only able to run in effective time opposed real-time. ADS works by querying data from the historical Trajectory Data-Base, with a configurable set of parameters, which can be time restrictive(such as the 10 past Hours) and or from a Vessel specific set of Vessels. This data is then fed to our Anomaly Detection Service Module, which were implemented to detect :
 
 the Vessels Rendezvous and the miss using of the AIS Navigational Status.
 For the latter, we create a sub-method for the detection of Fishing Activities based on Vessels characteristics and Dynamics and the reported Navigational Status.
