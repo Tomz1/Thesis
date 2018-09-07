@@ -3,9 +3,11 @@
 
 \usepackage[draft]{todonotes}   % notes showed
 
-% For the list in Framework Requirements
+% For the list in Framework Requirements - made by TM
 \usepackage{enumitem}
 \newcommand{\subscript}[2]{$#1 _ #2$}
+
+
 
 %for the tables
 \usepackage{booktabs}
@@ -117,12 +119,12 @@
 \mainmatter	  % Numeração normal (1,2,3...)
 \pagestyle{fancy}
 
-\input{Chapter1.tex}
-\input{Chapter2.tex}
-\input{Chapter3.tex}
-\input{Chapter4.tex}
-\input{Chapter5.tex}
-\input{ChapterDump.tex}
+\input{chapters/Chapter1.tex}
+\input{chapters/Chapter2.tex}
+\input{chapters/Chapter3.tex}
+\input{chapters/Chapter4.tex}
+\input{chapters/Chapter5.tex}
+\input{chapters/ChapterDump.tex}
 \addtocontents{toc}{\vspace{2em}}
 
 %-------ANEXOS---------
@@ -148,7 +150,7 @@
 %\bibliographystyle{ieeetr}
 %\bibliographystyle{ieeetr}
 
-\bibliographystyle{unsrt}
+\bibliographystyle{ieeetr}
 %\bibliography{ThesisReferences}
 \bibliography{mendeley_v2}
 

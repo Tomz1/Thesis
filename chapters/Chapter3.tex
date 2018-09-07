@@ -40,8 +40,10 @@ This being said, for the defined requirements we categorized them into three mai
 \begin{enumerate}[label=(\subscript{AR}{{\arabic*}})]
     \item
     Detect Abnormal changes of (more than a configurable value) Direction.
+     \item
+    Detect Abnormal changes of (more than a configurable value) Velocity.
     \item
-    Detect Vessels disappearance from sensor coverage for more than a configurable Time period.
+    Detect Vessels disappearance from sensor coverage for more than a configurable Time Period.
     \item
     Detect when the observed Vessel Navigational Status is not consistent with the reported Vessel Kinematic features.
     \item
@@ -49,10 +51,6 @@ This being said, for the defined requirements we categorized them into three mai
     \item
     Detect when two or more Vessels are approaching close to each other.
 \end{enumerate}
-
-
-
-
 
 
 
@@ -76,11 +74,11 @@ We provide a Modular Framework, as there are no inputs or outputs absolute stand
 
 as the requirements for one so by defining a Framework allows a flexible configuration from either types of Anomalies, system, allows a easier adoption of these services by Maritime end users. 
 
-on a Lambda Architecture, and having the Apache Ecosystem. composed from four main modules, as shown in Fig. XX ...
+%on a Lambda Architecture, and having the Apache Ecosystem. composed from four main modules, as shown in Fig. XX ...
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = .37]{figures/Ch3/Framework.pdf}
+	\includegraphics[scale = .35]{figures/Ch3/Framework.pdf}
     \caption{Proposed Beta Framework \todo[inline]{NEEDS MORE DETAIL THIS IMAGE}.}
     \label{fig:Framework}
 \end{figure}
