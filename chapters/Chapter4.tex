@@ -6,10 +6,11 @@ In this Chapter, we present a description of the Implementation of \todo[inline]
 
 \section{Data Analysis}
 \label{section: Data Analysis}
-In order to gain insight and find the limitations of the AIS Data, we decided analyze the provided Historical AIS Data. For this Section, the Data Analysis we used the historical AIS Data-Set made publicly available by \cite{DATASET}.
+In order to gain insight and find the limitations of the AIS Data, our initial step towards the implementation of the framework was a the analysis of an Historical AIS Data-Set. The analyzed Data-Set was compiled, and made publicly available by another H2020 European Project\footnote{http://datacron-project.eu}.  The choice of this Data-Set was done, due to the completeness of Documentation and Description of the actual Data-Set, which to the extend of our knowledge, was the only open-source Data-Set with this characteristics.  
 
-Analysis of the provided Historical Data, was conducted by firstly analyzing the overall distribution of the Data-Set and after the analysis of each variable. 
-The used Data-Set is composed of \textbf{18.684.115} AIS Messages originated by \textbf{4555} different Vessels. The Data-Set covers a Period of 6 Months (from 2015-10-01 to 2016-03-31), from a area nearby Brest, France represented in Figure \ref{fig:DS_Sample}.
+Thus, in this Section, we present a Data Analysis made from the Data-Set\cite{DATASET}. The Analysis was done by firstly analyzing the overall distribution of the Data-Set and after the general analysis of each variable.  
+
+The used Data-Set, is composed of \textbf{18.684.115} AIS Messages originated by \textbf{4555} different Vessels. The Data-Set covers a Period of 6 Months (from 2015-10-01 to 2016-03-31), from a area nearby Brest, France as it is presented in Figure \ref{fig:DS_Sample}.
 
 \begin{figure}[H]
 	\centering
@@ -17,53 +18,40 @@ The used Data-Set is composed of \textbf{18.684.115} AIS Messages originated by 
     \caption{Area of the Data-Set represented in the Red, with a sample of 50.000 AIS Positions.}
     \label{fig:DS_Sample}
 \end{figure}
+
 Every AIS Message provided in the Data-Set, is composed by the features that derive from the AIS Dynamic Information. In Table \ref{Table: Data-Set Features}, we describe the Data-Set features and also the unit and range of each feature. 
 
 \begin{table}[H]
 \centering
-\caption{My caption}
+\caption{AIS dynamic messages features description.}
 \label{Table: Data-Set Features}
 \begin{tabular}{@{}llll@{}}
 \toprule
 Feature & Description                  & Unit               & Range          \\ \midrule
-MMSI    & AIS Navigational Status.     &                    & 0 to 99999     \\
+MMSI    & Vessel Unique Identifier.     &                    & 0 to 99999     \\
 Status  & AIS Navigational Status.     &                    & 0 to 15        \\
 Turn    & Rate of turn, right or left. & degrees per minute & 0 to 720       \\
 SOG     & Speed Over Ground.           & knots              & 0 to 111*      \\
 COG     & Course Over Ground.          & degrees            & 0º to 360º     \\
 X       & Longitude.                   & degrees            & -180º to +180º \\
 Y       & Latitude.                    & degrees            & -90º to 90º    \\
-Time    & received Time-Stamp.         & Unix Time          &                \\ \bottomrule
+Time    & Received Time-Stamp.         & Unix Time          &                \\ \bottomrule
 \end{tabular}
 \end{table}
 
-With the same Data-Set it is possible to enrich the AIS Dynamic messages, with the Vessels Static information. By interpolating the MMSI we accessed information of the actual Vessels Static information, which represents the actual Vessel Characteristics, such as the dimensions of the Vessel, and what had more importance for us the Vessel Type.
-
-
-
-
-posiextrapolate Vessels Static information, thus gaining information of the Vessel Characteristics, such as, the dimension characteristics of the Vessel and the Vessel type information. Vessel Type is a good indicator to filter the Data, based on the Vessel data thus knowing if
-
-effective way, to query the Dtafilter the Vessel activities based on the Vessel type.
-represented in Table, is significant to gain information by know in
-
-\P
-As any 
-
-\todo[inline]{MORE TEXT HERE} The features represented above, were al contained 
-
-Working with big ... INTRO
-
-Our first cleani
+The Data-Set contains not only the Dynamic information correspondent of the AIS messages, but also the related Vessel Static Information of each Vessel from the Data-Set. By interpolating the MMSI reported in every AIS message, we were able to enrich each dynamic message, with the static information related to the Vessel which produced this message. The Vessels Static Information correspond to the actual Vessels dimensions and Type. The use of this information related to the Vessels characteristics is used in different types of Behavioural Analysis. In this work we used the Vessel Type as an aggregation indicator, which is better described in Section \ref{subsection: Vessel Type}.
 
 \section{Implemented Framework}
-\todo[inline]{need to intro the framework talk about the used techinques. -> kafka -> spark -> cassandra}
+\todo[inline]{need to intro the framework talk about the used techinques. -> kafka -> spark?!? -> cassandra}
 
 \section{Data Ingestion}
 \todo[inline]{}
 Data Ingestion refers to the model, where the Data is input into the Framework. As mentioned in Chapter III, was assumed for this work that data would be able to come in two different typologies, either from Batches of Data or Live NMEA streams. 
 
-The Framework was implemented to handle, any source of AIS data, although for the purpose of this work, we limited the used Data to two main sources of Data. of Data
+The Framework was developed to be scalable, being able to handle different sources of AIS data, although for the purpose of this work, we limited the used Data to two main sources of Data. The Data-Set presented in Section \ref{section: Data Analysis}, and the NMEA feeds made available by the Portuguese Navy.
+
+
+
 
 \section{Data Pre-processing}
 Data Pre-processing, represents the module that handles the Raw AIS data, Cleaning, Transforms and Normalizes every AIS messages, coming from the Data Ingestion Module. Every AIS message is transformed into our normalized representation of and AIS message, which we defined as a \textbf{Behavioural Point}, defined under in \ref{subsection: Behavioural Point}.
@@ -108,6 +96,7 @@ using this Identifier to and the MMSI represents the Unique Identifier of the Ve
 
 \section{Feature Engineering}
 \subsection{Vessel Type}
+\label{subsection: Vessel Type}
 Vessel Type, is a classification system, where each Vessel is categorized by the type of activities it preforms. Classified by a numeric scale from 0 to 99; the first digit represents the general category of the subject Vessel, and the combination of the first digit with the second represent a specific activity of the Vessel. In Table XX we present the Vessel General category associated with the first digit, and also the specific Categories which are more representative in the Data-Set.
 
 \begin{table}[H]
@@ -302,7 +291,7 @@ The problem with relying on Human action to update the actual Vessel Navigationa
 
 \begin{table}[H]
 \centering
-\caption{My caption}
+\caption{AIS Navigational Status enumeration.}
 \label{Table: AIS Status}
 \begin{tabular}{@{}cl@{}}
 \toprule
@@ -444,7 +433,7 @@ While is obvious that the routes are similar in a positional way, they occur at 
 
 \section{Rule Based Anomaly Detection Service}
 A Rule is defined as something that can, at least in the way we approach them, be expressed as an if-then sentence, \cite{Edlund2006titleRule-basedSurveillance/title}
-Anomaly Detection based on the definition of rules, is a method extremely used in the literature, as it represents a extremely effective way to detect Anomalies at seas, but it is also only viable if and only if the rules are defined by Subject Matter Experts (SMEs) \cite{Boinepalli2014AAlgorithm, Will2011FastProcesses}.
+Anomaly Detection based on the definition of rules, is extremely used in the literature, as it represents an effective way to detect Anomalies at seas. Although this in only viable if and only if the rules are defined by Subject Matter Experts (SMEs) \cite{Boinepalli2014AAlgorithm, Will2011FastProcesses}.
 
 Rule Based Anomaly Detection Service, was developed to detect Anomalies that can be codified into a rule or a set of rules, in real-time. 
 Our approach to detect Anomalies in real-time was by storing the $N$ last Behavioural Points for each Vessel in a Service Cache, working like a first in first out (FIFO) queue. $N$ is a configurable Value, which represents the limit of messages stored in Service Cache for each Vessel, we provide an intuitively way to reduce the hardware requirements to run this service in Real-Time.
@@ -497,7 +486,7 @@ First, as we store the Last $N$ $BPs$ for each Vessel that we received AIS messa
 
 The a priori way, is when a Signal Loss anomaly is generated with out the reception of the a new message of a certain Vessel. Having the latest $BP$ for each Vessel stored in the Vessel Queue, if more than $M$ minutes have passed without receiving a Message for this Vessel an anomaly is generated. Both methods of detection represent the actual Signal Loss from a Data Stand point, and depending on the situation both can generate value to the End-Users. 
 
-
+\iffalse
 \section{DUMPZ}
 
 \todo[inline]{this needs to be done...}
@@ -552,7 +541,7 @@ which can limit the ammount of taking a full advantage from the Spark Streaming 
 Despite being possible to create a fully configurable Service that would manage rules, and 
 
 From the anomalies defined in Sec. XX, and by accessing Maritime Expert Knowledge via the MARISA project, we concluded that, apart from the Anomalies detected by the Anomaly Detection Service (Sec. XX), 
-
+\fi
 
 
 
