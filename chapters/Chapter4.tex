@@ -2,11 +2,13 @@
 \label{chapter:Chapter 4}
 \lhead{Chapter 4. \emph{Implementation}}
 
-In this Chapter, we present a description of the Implementation of \todo[inline]{need a framework name}. Firstly, we provide a Data Analysis from the provided Historical data, which \todo[inline]{needs way more talk}.
+In this Chapter, we present the development steps towards the implementation of the \emph{Modular Anomaly Detection Framework} MAD-F. Firstly, we list the technologies used for this work. Then we undertake a data analysis from a historical AIS data-set. And finally, we list the modules of the developed MAD-F, detailing the technologies used, and methods for each developed module.
+
+The goal of developing a modular framework, was based on ideal that a future work could be developed based on this work, as either single modules can used, or new modules can be added to the MAD-f. For this we used technologies that would be efficient and stable, but also that could scale for 
 
 \section{Data Analysis}
 \label{section: Data Analysis}
-In order to gain insight and find the limitations of the AIS Data, our initial step towards the implementation of the framework was a the analysis of an Historical AIS Data-Set. The analyzed Data-Set was compiled, and made publicly available by another H2020 European Project\footnote{http://datacron-project.eu}.  The choice of this Data-Set was done, due to the completeness of Documentation and Description of the actual Data-Set, which to the extend of our knowledge, was the only open-source Data-Set with this characteristics.  
+In order to gain insight and find the limitations of the AIS Data, our initial step towards the implementation of the framework was a the analysis of an Historical AIS Data-Set. The analysed Data-Set was compiled, and made publicly available by another H2020 European Project\footnote{http://datacron-project.eu}.  The choice of this Data-Set was done, due to the completeness of Documentation and Description of the actual Data-Set, which to the extend of our knowledge, was the only open-source Data-Set with this characteristics.  
 
 Thus, in this Section, we present a Data Analysis made from the Data-Set\cite{DATASET}. The Analysis was done by firstly analyzing the overall distribution of the Data-Set and after the general analysis of each variable.  
 
@@ -40,9 +42,6 @@ Time    & Received Time-Stamp.         & Unix Time          &                \\ 
 \end{table}
 
 The Data-Set contains not only the Dynamic information correspondent of the AIS messages, but also the related Vessel Static Information of each Vessel from the Data-Set. By interpolating the MMSI reported in every AIS message, we were able to enrich each dynamic message, with the static information related to the Vessel which produced this message. The Vessels Static Information correspond to the actual Vessels dimensions and Type. The use of this information related to the Vessels characteristics is used in different types of Behavioural Analysis. In this work we used the Vessel Type as an aggregation indicator, which is better described in Section \ref{subsection: Vessel Type}.
-
-\section{Implemented Framework}
-\todo[inline]{need to intro the framework talk about the used techinques. -> kafka -> spark?!? -> cassandra}
 
 \section{Data Ingestion}
 \todo[inline]{}
@@ -310,11 +309,7 @@ The problem with relying on Human action to update the actual Vessel Navigationa
 \end{tabular}
 \end{table}
 
-The use of the wrong Navigational Status being considered an Anomaly, $(AR_4)$, our approach towards the detection of this Anomaly, started by firstly analyzing the use and the frequency of each Navigational Status. 
-
-We concluded, based on the frequency count of each Status that there are AIS Status which are solely used in special scenarios. Thus, for this work we focus on the detection and validation of AIS Status that can be justified on the Vessels Dynamic Features.
-
-\missingfigure{COUNT PLOT - AIS STATUS COUNTS}
+The use of the wrong Navigational Status being considered an Anomaly, $(AR_4)$, our approach towards the detection of this Anomaly, started by firstly analyzing the use of each Navigational Status. 
 
 With the help of Maritime Officers Expertise, we enriched our Description from each Navigational Status, be classifying the appropriate \textbf{Stopped or Moving Label} to each Navigational Status. Maritime Experts, based on what the Navigational Status Kinematics should represent provided the following
 Table\ref{Table: AIS Status Moving or Stopped}.
@@ -333,13 +328,10 @@ Non-Quantifiable & 2, 3, 4, 15                \\ \hline
 \end{table}
 $7^*$(the Engaged at Fishing) represents a Special Navigational Status which cannot be validated by a Stopped or Moving Analysis. The Validation of this specific Status is done in Subsection under, Section \ref{subsection: Fishing Activity Detection}.
 
-The actual Navigational Status Validation, is done as a Point Based Comparison. By comparing the enriched Feature\textit{Smoothed Stopped or Moving}(Section \ref{subsection: Smoothed Stopped / Moving}) with the Label the Maritime Expert has defined for the Navigational Status, reported for each $BP$.
+The actual Navigational Status Validation, is done as a Point Based Comparison. By comparing the enriched Feature \textit{Smoothed Stopped or Moving}(Section \ref{subsection: Smoothed Stopped / Moving}) with the Label the Maritime Expert has defined for the Navigational Status, reported for each $BP$.
 An example for this validation could be:
 
-If a $BP$ has been received with the Navigational Status \textit{0 - under way using engine}, but the 
-reported Kinematics describe it as \textit{Stopped}, which for this Status should be \textit{Moving}  
-
-\todo[inline]{need to finish this}
+If a $BP$ has been received with the Navigational Status \textit{0 - under way using engine}, but the reported Kinematics describe it as \textit{Stopped}, which for this Status should be \textit{Moving}.
 \iffalse
 labeled as a , but the reported Navigational Status , this is the Navigational Status which is labeled has Moving, it means the $BP$ was broadcast with the Wrong Navigational Status, or represents that the Vessel should be Moving, 
 
@@ -362,7 +354,12 @@ being considered Anomalous, our approach towards the detection of this
 \subsection{Fishing Activity Detection}
 \label{subsection: Fishing Activity Detection}
 
-Based on the Navigational Status Validation presented above, for this work, we decided to focus on the detection of the Vessel Fishing activity, which cannot Special Navigational Status, which is also a Special 
+Based on the Navigational Status Validation presented above we decided to enrich this validation with the detection of Special Navigational Status, the Fishing activity (Navigational Status - 7 - Engaged in Fishing). 
+
+The Fishing activity is a activity much profitable for the global Maritime Scenario. This activity being profitable and competitive betwhen Fishing Companies, generates a problem for the Maritime Authorities. Fishing Vessel try to hide their "fishing spots" from other Fishing Vessels as most as their can. Although this type of behaviour leads to ilegal activities   and the AIS being broadcast for other Vessels, i
+
+
+, which cannot Special Navigational Status, which is also a Special 
 
 we decided in order to enrich the functionalities of the Navigational Status Detection, to detecting Fishing Activity from Fishing Vessels. 
 
@@ -474,8 +471,7 @@ Although, we noticed depending how Vessels are Moored at port\footnote{http://ma
 
 In order to mitigate this problem, we defined other configurable condition, Minimum SoG Threshold. Thus, the representation of the configurable Set of rules for the detection of rule for the detection of $(AR_1)$, is :
 
-\[If abs(MQ_{T}.CoG - MQ_{T-1}.CoG)  and  MQ_T.SoG > S then Anonalous.\]
-
+\[ If\; abs(MQ_{T}.CoG - MQ_{T-1}.CoG)\;and\; MQ_T.SoG > S\; then\; Anonalous.\]
 
 \subsection{AIS Signal Loss}
 The \textit{disappearance from sensor coverage for more than a configurable Time Period}, $(AR_3)$, can be caused for numerous reason as it is mentioned in Section XX. From a data stand point the disappearance from sensor coverage is represented as the loss of signal, or in other words, the non reception of AIS messages from this Vessel for more than $M$ Minutes.

@@ -2,37 +2,37 @@
 \label{chapter:Chapter 3}
 \lhead{Chapter 3. \emph{Methods and Systems Developed}}
 
-In this Chapter, we present the overall description of steps towards the development of the Modular Anomaly Detection Framework. First we present the actual list of requirements that served as a blueprint for the developed Framework. The functional requirements for the developed Framework were defined by Maritime Officer Experts under the MARISA project, which we present the steps made for the definition of this requirements under in Section XX. 
-We present a detailed list of this requirements in the Sub
+In this Chapter, we present the overall description of steps towards the development of the \emph{Modular Anomaly Detection Framework} which will be used throughout this thesis. 
+A crucial component in this work relied on a technically accurate definition of a \emph{maritime anomaly}. This is generally speaking a challenging task since a data-driven definition is currently lacking or insufficient. A more meaningful solution to this problem was provided by the aid of maritime experts who were engaged in the \textsc{marisa} project. In particular, members of the Portuguese Navy interacted with us in order to offer the required their exclusive technical insight.
 
-Second we present overview of the proposed Modular Anomaly Detection Framework, Fig. XX, and the overall description of each developed module in  following subsections we provide a overall explanation of each module functionality. 
+Given their specific input and real-world knowledge of the maritime domain, one can arrive at a well-defined concept of anomaly that can be translated into a precise notion to be used in this Framework. Before we engage in the specific requirements that served as a blueprint for the developed framework, such a definition will be given. This will then be followed by the technical description of such requirements, namely by distinguishing \emph{anomaly} and \emph{data requirements}.
 
-by describing the overall view of the proposed Modular Framework, Secondly we provide a detailed explanation of each Module and the methods used for each Module. 
+Lastly, a general overview of the proposed Modular Anomaly Detection Framework, which will be referred to as MAD-F from now on, is presented. This is done in light of \todo{Fig. XX}, whose modules are explained individually throughout the following subsections Sec. \ref{subsection: ADS - Rendezvous Experiment}XXXXXXX.
 
 
-\section{Anomaly Definition}
-An Anomaly can have numerous interpretations depending on the context in which is found, but it can be generally defined as Data that stand out when contrasted to other Data.
+\section{Anomalies within the Framework}
+\label{section: Framework Requirements}
+An anomaly may have numerous interpretations depending on the context in which it is found. However, it can be generally conceptualised as a subset of data that stands out in some preconceived way when contrasted to the overall dataset. Nowadays, the anomaly detection of vessel behaviour is solely done by human maritime experts. This procedure depends on national security agencies. Within their duties, these agencies are responsible for assuring the coastal surveillance of their territory by assessing possible threats and identifying abnormal behaviour. The current methods employed by these institutions are neither efficient nor scalable and therefore not suitable for the challenges brought by the exponential growth of vessels at seas. This state of affairs creates an ideal situation for the use of data-driven models to assist the maritime experts.
 
-Nowadays Vessel Anomaly Detection is solely done by Human Maritime Experts, with every Maritime Security Agency assuring the coastal surveillance of their territory, by assessing possible threats, and identifying abnormal behaviour. 
-%The identified abnormal Vessel behaviour is then further investigated by Maritime Authorities, which can lead to fines or even criminal charges against the Vessel crew. 
-The problem of this current methodology for Anomaly Detection, is that is extremely inefficient. Human analysis only allows a limited number of Vessels that can be analyzed. This problem is aggravated as the number of Vessel at seas is increasing every year in a exponential rate. 
+The notion of anomaly just presented is unsatisfactory given both the complexity and purpose of the problem. For the goals of this project, such a technical definition is tailored specifically by the maritime agencies involved in the \textsc{marisa} project and we therefore refrain from applying our own definitions, which usually stem from abstract statistical data-driven notions.
 
-This creates a typical situation for the use of Machine Learning models to aid the necessities of Maritime Experts.
-%, in the field of Maritime Anomaly Detection.
-Although, formalizing an Vessel Anomalous Behavior is extremely difficult, as it is not clear what is Anomalous in the when only analyzing the Maritime data, and there is no available historical Anomalous Data-Set, to the best of our knowledge.
+
+\iffalse
+Although formalizing an Vessel Anomalous Behavior is extremely difficult, as it is not clear what is Anomalous in the when only analyzing the Maritime data, and there is no available historical Anomalous Data-Set, to the best of our knowledge.
 
 To solve this problem of the defining Vessel Abnormal Behaviour, Expert Knowledge from Maritime Experts was accessed under the MARISA project. Maritime Experts in order to define Anomalies which could be formalized, provided a list of Vessels Anomalies which behaviour. firstly a list of  
-
+\fi
 
 
 %It is impossible to define Anomalous, when only   
 
 %any Vessel Anomaly can be caused by a undetermined number of factors,      . 
 
-Thus, the context and causes of every Anomaly needs defined by Maritime Experts. Thus, in order to surpass the problem of the definition of an Anomaly; Expert Knowledge from Maritime Experts was accessed under the MARISA project. Maritime Experts defined, firstly a list of  
+Thus, the context and causes of every Anomaly needs defined by Maritime Experts. Thus, in order to surpass the problem of the definition of an Anomaly; Expert Knowledge from Maritime Experts was accessed under the MARISA project. Maritime Experts defined, firstly a list of  \\ \\ \\  
 
-\section{Framework Requirements}
-\label{section: Framework Requirements}
+
+
+
 In order to develop a framework that will addresses the real demands of Maritime Officers, we surveyed the only agents that could significantly insight Maritime Officers under the MARISA project. in order to fully understand the demands for a Framework for Maritime Anomaly Detection.
 This being said, for the defined requirements we categorized them into three main classes:
 
@@ -87,6 +87,7 @@ as the requirements for one so by defining a Framework allows a flexible configu
 In the following subsections, we discuss each module: Data Fusion, Vessel T Extraction, Anomaly Detection and Reporting...
 
 \subsection{Data Ingestion}
+\ref{subsection: Data Ingestion}
 Data Ingestion Module, represents the Data input for the developed Framework. AIS data was the most representative data type used for this work, as it showcases the actual instantaneous Vessel information.
 Although, used AIS data for this work came in two really distinct formats: It came either in \textbf{Historical Batches} representing Historical sets of Data, or real \textbf{NMEA AIS Streams}, which represent real, real-time data. For both formats of AIS data, the framework is scallable, and able to Ingest one or multiple feeds / sources of AIS data.
 
@@ -133,6 +134,7 @@ Although, the distance in which Stations are capable of receiving AIS messages p
 %Thus, and as requirement of the MARISA project was to use Apache Spark [REF FOR APACHE SPARK] modules for data-ingestion and pre-processing, we decided to use Apache Cassandra as the Data-Storage for the proposed framework.
 
 \subsection{Data Pre-processing}
+\ref{subsection: Pre-processing}
 The Data Pre-processing module, is the first step of Data Wrangling in our Framework, the motive for this module is to clean, transform and normalize, the AIS data.
 % either from the different Sources of Historical AIS data or the decoded AIS NMEA live feeds, which come from the Data Ingestion Module.  
 
