@@ -10,6 +10,7 @@ The validation of the results presented in this Chapter, can only truly occur wi
 In this Section we present the results leading from experiences conducted in order to validate the operational capabilities of the Framework.
 
 \section{Hardware Used}
+\todo[inline]{this will not be a section, will be presented in Chapter intro.}
 
 \section{Data Validation Experiment}
 \label{section: Experiment Data Val}
@@ -17,7 +18,7 @@ The Data Validation Experiment we accessed the performance Data-Ingestion capabi
 
 We allowed the Framework to be executed for five straight days, thus ingesting pre-processing and wrangling the provided AIS NMEA into Behavioural Points. We then stored the $BPs$ in the Trajectory Extraction Cassandra Data-Base.
 As the messages were being received in real-time the MAD-F decoded the NMEA feed into a readable format, from which the irrelevant features for the developed Framework.
-\todo[inline]{mudar de historia}
+\todo[inline]{Change to the BP simulation scenario}
 From the 5 days of data acquiring, we received NMEA AIS messages from a total of $5563$ different Vessels, leading to a grand total of $2,259,615$ NMEA messages.
 
 After the messages were decoded into a set of features, as the used NMEA AIS feed did not broadcast the Vessel Type of the Vessel that generated this message. The Vessel Static Information, namely the Vessel Type and country of origin were scrapped using using the developed \emph{Vessel Type Scrapper}. From the $5563$, $6$ Vessels were not considered as their static information, namely their MMSI was either not found or their MMSI was representative of more than one Vessel. The latter, represents an abnormal situation which could be denominated Spoofing, as represented by the authors in \cite{Ray2015DeAISRisks} or in \footnote{http://globalfishingwatch.org/data/spoofing-one-identity-shared-by-multiple-vessels}. This is a occurring problem when handling AIS data. 
@@ -26,7 +27,7 @@ After the messages were decoded into a set of features, as the used NMEA AIS fee
 	\centering
 	\includegraphics[scale = .7]{figures/Ch5/DataValidationVesselType.png}
     \caption{Vessel Type distribution of $5157$ Vessels.}
-    \label{fig: Exp1 - Vessel Type Distribution}
+    \label{fig: 5 Vessel Type Distribution}
 \end{figure}
 
 \todo[inline]{talk about ports}
@@ -36,7 +37,7 @@ Another feature calculated on this module was the point-based closest distance t
 \begin{table}[H]
 \centering
 \caption{Most Frequent Closest Ports Counts.}
-\label{my-label}
+\label{Table: 5 Closest Ports}
 \begin{tabular}{@{}lcc@{}}
 \toprule
 Port Name & Counts & Counts(\%) \\ \midrule
@@ -55,8 +56,8 @@ Faro & 62,925 & 2,9\% \\ \bottomrule
 
 \begin{table}[H]
 \centering
-\caption{My caption}
-\label{my-label}
+\caption{Most Frequent Closest Countries Counts.}
+\label{Table: 5 Closest Countries}
 \begin{tabular}{@{}lcc@{}}
 \toprule
 Country & Counts & Counts(\%) \\ \midrule
@@ -74,7 +75,13 @@ The all ready pre-processed AIS Messages were then stored as $BPs$
 
 The scrapped information was stored in a internal module cache, 
 
-we received a total of \textbf{}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale = 1]{figures/Ch5/ThesisExpDensity.png}
+    \caption{Density map, with all the aprox. $2.2$ Milion points.}
+    \label{fig: 5 Exp1DensityMap}
+\end{figure}
+
 From this messages 
 
 Validate the proper aquirement of real time data.
@@ -105,7 +112,7 @@ The simulator gathers $BPs$ from the trajectories (or a group of) stored in the 
 	\centering
 	\includegraphics[scale = .3]{figures/Ch5/SRM-Exp-Simulator.pdf}
     \caption{BPs Simulator.}
-    \label{fig: Exp1 - Vessel Type Distribution}
+    \label{fig: 5 BPs Simulator}
 \end{figure}
 
 
@@ -135,8 +142,8 @@ We conducted this Experiment on the all-ready pre-processed Data-Set(SECTION XX 
 
 \begin{table}[H]
 \centering
-\caption{My caption}
-\label{my-label}
+\caption{Anomaly Detection Service - Rendezvous input parameters.}
+\label{Table: 5 ADS Rendezvous input paramenters.}
 \begin{tabular}{@{}cccc@{}}
 \toprule
 Rendezvous Parameter & BPs & Time-Window & Distance Threshold \\ \midrule
@@ -144,16 +151,16 @@ Rendezvous Parameter & BPs & Time-Window & Distance Threshold \\ \midrule
 \end{tabular}
 \end{table}
 
-The whole Experiment took 150 Seconds to execute with the Hardware presented in SectionXX. Rendezvous firstly partitioned all the 18M BPs into \textbf{26352} Time-Groups of 10min. From this Experiment we found \textbf{82195 Possible Rendezvous occurrences}, which we plotted Density Map in order to try to understand the results, as shown in FigXX.
+The whole Experiment took 150 Seconds to execute with the Hardware presented in Section \ref{chapter:Chapter 5}. Rendezvous firstly partitioned all the 18M BPs into \textbf{26352} Time-Groups of 10min. From this Experiment we found \textbf{82195 Possible Rendezvous occurrences}, which we plotted Density Map in order to try to understand the results, as shown in FigXX.
 
 \missingfigure[]{Density Map Plot!!!}
 
-From the Density Map we realized that most of the detected Rendezvous Occurrences occurred inside Port. Vessels being close to each-other inside a Port is not Anomalous, and brings no Value to the Maritime Officers, as when Vessels are inside Ports are in fact close other Vessels. In order to mitigate this we analyzed the Distance to Port from the detected Rendezvous occurrences, leading to the TableXX, presented under.
+From the Density Map we realised that most of the detected Rendezvous Occurrences occurred inside Port. Vessels being close to each-other inside a Port is not Anomalous, and brings no Value to the Maritime Officers, as when Vessels are inside Ports are in fact close other Vessels. In order to mitigate this we analysed the Distance to Port from the detected Rendezvous occurrences, leading to the \ref{Table: 5 Distance to Port Rendevouz}, presented under.
 
 \begin{table}[H]
 \centering
-\caption{My caption}
-\label{my-label}
+\caption{Rendezvous distance to port (bin)count plot.}
+\label{Table: 5 Distance to Port Rendevouz}
 \begin{tabular}{@{}ccccc@{}}
 \toprule
 Distance to Port ($dp$) & $dp$\textless{}0.5 & 0.5\textless{}$dp$\textless{}1 & 1\textless{}$dp$\textless{}2 & $dp$\textgreater{}2 \\ \midrule

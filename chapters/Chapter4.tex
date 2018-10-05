@@ -2,17 +2,22 @@
 \label{chapter:Chapter 4}
 \lhead{Chapter 4. \emph{Implementation}}
 
-In this Chapter, we present the development steps towards the implementation of the \emph{Modular Anomaly Detection Framework} MAD-F. Firstly, we list the technologies used for this work. Then we undertake a data analysis from a historical AIS data-set. And finally, we list the modules of the developed MAD-F, detailing the technologies used, and methods for each developed module.
+In this Chapter, we present the development steps towards the implementation of the \emph{Modular Anomaly Detection Framework} MAD-F. Firstly, we present a list of the technologies used in this work. Then we undertake a data analysis from a historical AIS data-set. And finally, the implementation of each MAD-F module is individually  explained, providing a detailed clarification of the undertaken approaches.
 
-The goal of developing a modular framework, was based on ideal that a future work could be developed based on this work, as either single modules can used, or new modules can be added to the MAD-f. For this we used technologies that would be efficient and stable, but also that could scale for 
+%used methods detailing the technologies used, and methods for each developed module.
+
+In order not to develop a fully static framework, a modular development was applied instead. This allows specific modules of the framework to be instanced multiple times with different configuration; or even the possibility of having the new modules added to the framework in the future.
+%As working with project, the  that a future work could be developed based on this work, as either single modules can used, or new modules can be added to the MAD-F. 
+
+For this end the choice of technologies was done by by emphasising efficiency handling large quantities of data and scalability. Implementation of this Framework was done with the programming language Python, using different specific packages for the different specific tasks. The used packages and their usage will be explained throughout this Chapter. Architecturally wise, the framework was implementing following an somehow layered architecture, similar to the \emph{Lambda Architecture}, which was firstly introduced by the authors in \cite{Marz2015BigSystems}. As so, the chosen data-base for this framework was Apache Cassandra \footnote{http://cassandra.apache.org/}, which was essential to store the aggregated $BPs$ in a fast and effective way. The detailed usage of the data-base is explained in \ref{section: 4 Unsupervised Trajectory Extraction}. The reception of $BPs$ by the \emph{Unsupervised Trajectory Extraction} module was done using a message queue system Apache Kafka \footnote{https://kafka.apache.org/}. The same message queuing approach as also implemented for the modules who needed to send and consume messages between them. A detailed explanation of such implementation is provided in the following sections.
 
 \section{Data Analysis}
 \label{section: Data Analysis}
-In order to gain insight and find the limitations of the AIS Data, our initial step towards the implementation of the framework was a the analysis of an Historical AIS Data-Set. The analysed Data-Set was compiled, and made publicly available by another H2020 European Project\footnote{http://datacron-project.eu}.  The choice of this Data-Set was done, due to the completeness of Documentation and Description of the actual Data-Set, which to the extend of our knowledge, was the only open-source Data-Set with this characteristics.  
+In order to gain insight and find the limitations of the AIS data, our initial step towards the implementation of the framework was a the analysis of an historical AIS data-set. The analysed Data-Set was compiled, and made publicly available by another H2020 European Project\footnote{http://datacron-project.eu}. 
+This data-set was chosen, due to the completeness of documentation and description of the actual data-set; which to the extend of our knowledge was the only open-source AIS data-set with such characteristics.  
 
-Thus, in this Section, we present a Data Analysis made from the Data-Set\cite{DATASET}. The Analysis was done by firstly analyzing the overall distribution of the Data-Set and after the general analysis of each variable.  
-
-The used Data-Set, is composed of \textbf{18.684.115} AIS Messages originated by \textbf{4555} different Vessels. The Data-Set covers a Period of 6 Months (from 2015-10-01 to 2016-03-31), from a area nearby Brest, France as it is presented in Figure \ref{fig:DS_Sample}.
+In this Section, we present a data analysis from the data-set \cite{DATASET}. We conducted this data analysis, by firstly providing a general description of the used data-set, and secondly by analysing the overall feature distribution of the each feature in the used data-set.
+The used data-set, is composed from \textbf{18.684.115} AIS messages originated by \textbf{4555} different Vessels. The Data-Set covers a Period of 6 Months (from 2015-10-01 to 2016-03-31), from a area nearby Brest, France as it is presented under in Figure \ref{fig:DS_Sample}.
 
 \begin{figure}[H]
 	\centering
@@ -21,7 +26,7 @@ The used Data-Set, is composed of \textbf{18.684.115} AIS Messages originated by
     \label{fig:DS_Sample}
 \end{figure}
 
-Every AIS Message provided in the Data-Set, is composed by the features that derive from the AIS Dynamic Information. In Table \ref{Table: Data-Set Features}, we describe the Data-Set features and also the unit and range of each feature. 
+Every AIS message provided in the data-set, is composed by the features that derive from the AIS dynamic information. In Table \ref{Table: Data-Set Features}, we describe the data-set features by detailing their units and their unit range. 
 
 \begin{table}[H]
 \centering
@@ -41,24 +46,27 @@ Time    & Received Time-Stamp.         & Unix Time          &                \\ 
 \end{tabular}
 \end{table}
 
-The Data-Set contains not only the Dynamic information correspondent of the AIS messages, but also the related Vessel Static Information of each Vessel from the Data-Set. By interpolating the MMSI reported in every AIS message, we were able to enrich each dynamic message, with the static information related to the Vessel which produced this message. The Vessels Static Information correspond to the actual Vessels dimensions and Type. The use of this information related to the Vessels characteristics is used in different types of Behavioural Analysis. In this work we used the Vessel Type as an aggregation indicator, which is better described in Section \ref{subsection: Vessel Type}.
+The data-set not only contains the AIS dynamic information correspondent, but also, in separate files the related vessel static information of each Vessel which has reported in data-set. By interpolating the MMSI reported in every AIS message, we were able to enrich each AIS dynamic message (or row of the data-set), with the static information related to the vessel which has produced the dynamic message. The vessel's static information contain information of the vessel's actual dimensions and type. The use of information related to the vessels characteristics is used in different types of behavioural analysis. In this work we used the vessel type as an key aggregation indicator, better described in Section \ref{subsection: Vessel Type}.
 
 \section{Data Ingestion}
 \todo[inline]{}
-Data Ingestion refers to the model, where the Data is input into the Framework. As mentioned in Chapter III, was assumed for this work that data would be able to come in two different typologies, either from Batches of Data or Live NMEA streams. 
+Data Ingestion refers to the model, where the Data is input into the Framework. As mentioned in Chapter \ref{chapter:Chapter 3}, for this work was assumed that the incoming data would be able to come in two different typologies, either from batches of AIS data or Live NMEA streams. 
+
+Historical batches of AIS data (or data-sets), are uploaded to this module via .csv files, which then are transformed into DataFrames using the Pandas\footnote{https://pandas.pydata.org}. For each imported batch of data, the features names must be pointed to the format we present in \ref{subsection: Behavioural Point}
+Although for the NMEA Streams the as the decoding of such streams was needed. The choice of methods to process and decode was not has trivial. As NMEA messages are received in high frequencies, the method to such streams into comprehensible AIS like data, needed to be stable and efficient. In order to achieve this, we used the python library libais\footnote{https://github.com/schwehr/libais}, which is implemented in the programming language C++, allowing a really efficient decoding of the incoming NMEA messages. 
+
+In Chapter \ref{chapter:Chapter 3}, we have identified two problems that occur when working with AIS real live. In order to mitigate the duplicated reception, presented in Section XX, each received messages is tagged with a UUID \todo[inline]{NEED TO TALK ABOUT THE UUID IF I WANT TO PUT THIS HERE}.
 
 The Framework was developed to be scalable, being able to handle different sources of AIS data, although for the purpose of this work, we limited the used Data to two main sources of Data. The Data-Set presented in Section \ref{section: Data Analysis}, and the NMEA feeds made available by the Portuguese Navy.
 
 
-
-
 \section{Data Pre-processing}
-Data Pre-processing, represents the module that handles the Raw AIS data, Cleaning, Transforms and Normalizes every AIS messages, coming from the Data Ingestion Module. Every AIS message is transformed into our normalized representation of and AIS message, which we defined as a \textbf{Behavioural Point}, defined under in \ref{subsection: Behavioural Point}.
+Data Pre-processing, represents the module that handles the raw/unprocessed AIS data, Cleaning, Transforms and Normalises every AIS messages, coming from the Data Ingestion Module. Every AIS message is transformed into our normalised representation of and AIS message, which we defined as a \textbf{Behavioural Point}, defined under in \ref{subsection: Behavioural Point}.
 
-\subsection{Latitude Longitude Normalization}
-In order to normalize the reported AIS positions, either from the AIS streams or the used Data-Set, we defined a set number of decimal cases used. This is done as most of AIS providers only assure a GPS precision of 0.0001 minutes accuracy, but what we found was that some reported positions come with up to 8 decimal cases, which can be caused just from how the Data-Set files were written.
+\subsection{Latitude Longitude Normalisation}
+In order to normalise the reported vessels positions, either from the AIS streams or the used Data-Set, we defined a set number of decimal cases used. This is done as most of AIS providers only assure a GPS precision of 0.0001 minutes accuracy, but what we found was that some reported positions come with up to 8 decimal cases, which can be caused just from how the Data-Set files were written.
 
-So our normalization process, was to assure that every Vessel position was normalized to a precision on 4 decimal cases; as it represents a global position precision of 11m to 4m, as it is shown in Table \ref{Table: Degree Precision}.
+So our normalisation process, was to assure that every Vessel position was normalised to a precision on 4 decimal cases; as it represents a global position precision of 11m to 4m, as it is shown in Table \ref{Table: Degree Precision}.
 
 \begin{table}[H]
 \centering
@@ -75,33 +83,37 @@ So our normalization process, was to assure that every Vessel position was norma
 5 & 0.00001 & 1.3m & 0.7m & 0.4m \\ \hline
 \end{tabular}
 \end{table}
-\todo[inline]{Geohash - https://en.wikipedia.org/wiki/Geohash}
-\todo[inline]{Another techniques?!?}
+%\todo[inline]{Geohash - https://en.wikipedia.org/wiki/Geohash}
 
 \subsection{Data Cleansing}
-Data Cleaning refers to the process of cleaning the Data which is wrongly defined or, has wrong types. When handling with sensor Data that is transmitted is common that wrong readings occur. In AIS data, this errors tend to occur as AIS features that are not transmitted with values that don't correspond to the Feature value range. An example of this is having a Latitude being broadcast with values of 500.
-\todo[inline]{maybe a table with the limits of each variable}
-For the messages transmitted with features that didn't correspond to the value range of the specific Feature, we discarded this messages. The features value range considered for the whole framework was the one presented in \ref{Table: Data-Set Features}.
+Data Cleaning refers to the process of cleaning the data which is wrongly defined or, has wrong types. When handling with sensor generated data is common that wrong sensor reading can occur. In AIS data, this errors tend to occur as AIS features that are not transmitted at all, or that are transmitted with values that don't correspond to the Feature value range. An example of this is having a Latitude being broadcast with values of 500.
+Therefore, we discarded all AIS messages with reported features that were not inside the feature value range. The features value range considered for the proposed framework was the one presented in \ref{Table: Data-Set Features}, which is the same as the one presented by the authors in XX,\todo{chinocas que tenho no paper impresso} as the AIS default feature range.
 
 \subsection{Behavioural Point}
 \label{subsection: Behavioural Point}
-A Behavioural Point is a multidimensional point $BP_{MMSI}$ is defined as:
+Behavioural Point for this work, is our normalised feature representation of incoming vessel data. A $BP$ is a multidimensional point which is identified by the vessel id who produced the reported message. Therfore a $BP_{MMSI}$ can be represented as:
+
 \[BP_{MMSI} = [t, x, y, SoG, CoG, NS]\]
-Where the dimensions of the multidimensional Behavioural Point represents the (Time, Longitude, Latitude, Speed Over Ground, Course Over Ground and Navigational Status) respectively, a representation of these features is provided in Table\ref{Table: Data-Set Features}. The Maritime Mobile Service Identity (MMSI) representing a unique identifier of each Vessel, was used for this work as the identifier of each $BP_{MMSI}$, we assumed the non replication of this identifier on different Vessels would occur.
 
-using this Identifier to and the MMSI represents the Unique Identifier of the Vessel.
+Where the dimensions of the multidimensional $BP$ represents the features (Time, Longitude, Latitude, Speed Over Ground, Course Over Ground and Navigational Status) respectively.
+Each $BP$ was correlated to one(one to one) identifier. The used identifier for this work was the Maritime Mobile Service Identity (MMSI). This choice represents certain problems, as it is mentioned by the author in XX and further discussed in Experiment XX (Section XX). Although, the non replication of the MMSI by different vessel was assumed for work. As this problem can be solved by the AIS provider, thus not occurring with every AIS provider. 
+Each $BP$, as described above is further enriched by extrapolating three additional features, making each $BP$ to be represented as:
 
+\[BP_{MMSI} = [t, x, y, SoG, CoG, NS, VT, DtS, DtP, PN]\]
 
+Where the additional features \emph{VT, DtS, DtP, PN} representing the Vessel Type, Distance to Port, Distance to Shore, Port Name. These features are not reported from every AIS messages and need to be extrapolated afterwards. The methods used to extrapolated this features are presented under (Section \ref{section: 4 Feature Engineering)}. 
 
 \section{Feature Engineering}
+\label{section: 4 Feature Engineering}
+
 \subsection{Vessel Type}
 \label{subsection: Vessel Type}
-Vessel Type, is a classification system, where each Vessel is categorized by the type of activities it preforms. Classified by a numeric scale from 0 to 99; the first digit represents the general category of the subject Vessel, and the combination of the first digit with the second represent a specific activity of the Vessel. In Table XX we present the Vessel General category associated with the first digit, and also the specific Categories which are more representative in the Data-Set.
+Vessel Type, is a classification system, where each vessel is categorised by the type of activities it preforms. Classified by a numeric scale from 0 to 99. The first digit represents the general activity category of the vessel, and the combination of the first digit with the second represent the specific activity of the vessel. In Table XX we list all the general vessel categories which are associated with the first digit of the vessel type feature, but also we present the specific vessel categories for the more frequent vessel types occurring on the data-set.
 
 \begin{table}[H]
 \centering
-\caption{My caption}
-\label{my-label}
+\caption{Vessel Type categorisation and most frequent representation.}
+\label{Table: Vessel Type Description}
 \begin{tabular}{@{}llll@{}}
 \toprule
 First Digit & General Category & Relevant Categories &                                                                                         \\ \midrule
@@ -117,138 +129,145 @@ First Digit & General Category & Relevant Categories &                          
 \end{tabular}
 \end{table}
 
-For the usd Data-Set described above in Section\ref{section: Data Analysis}, the Static Vessel Information is available for all the Vessel in the Data-Set. Although, when handling Real-Time NMEA streams or other Batches of Data, the Vessel Static information is not available or broadcast. This, creates a problem of not having the Vessel Type information which is used to query our Trajectory Data-Base.
+For the used Data-Set described above in Section\ref{section: Data Analysis}, the Static Vessel Information is available for all the Vessel in the Data-Set. Although, when handling Real-Time NMEA streams or other Batches of Data, the Vessel Static information is not available or broadcast. This, creates a problem of not having the Vessel Type information which is used to query our Trajectory Data-Base.
 For this we developed a \textbf{Web Scrapping application}, described in the following subsection.
 
 \subsubsection{Vessel Type Scrapper}
-Web Scrapping is used to extract information from freely available websites. For the sole purpose of this work, we developed an application that would retrieve the Vessel Type information from a well Known Vessel Traffic Webpage.
-By giving a Vessel Identifier (MMSI) to the Vessel Type Scrapper, we retrieve the html webpage data that contains all the Vessel Information from the well Known Vessel Traffic Webpage. From the html data we, strip the html tags thus retrieving the Vessel Type Information, as it is presented in Fig. \ref{fig:Scraper}.
+Web Scrapping is used to extract information from freely available websites. For the sole purpose of this work, we developed an application that would retrieve the Vessel Type information from a "well known vessel traffic webpage".
+By providing the vessel MMSI to the Vessel Type Scrapper, we retrieve the html webpage data that contains all the static vessel information available on the "well known vessel traffic webpage". From the html data we, striping the html tags, and the non relevant specific webpage information, we access Vessel Type, as it is presented in Fig. \ref{fig:Scraper}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale = .4]{figures/Ch4/scrapper}
-    \caption{Example of the Vessel Type Scrapper retreived information for Vessel MMSI: 255806006}
+    \caption{Example of the Vessel Type Scrapper retrieved information for Vessel MMSI: 255806006}
     \label{fig:Scraper}
 \end{figure}
 
 
 \subsection{Distance to Coast}
-The Distance to Shore influences, the navigational behaviour for some type of Vessels. In order to enrich the features used in our Anomaly Detection methods it seemed necessary to extrapolate the Distance to Shore for every point in the Data-Set. Although in order to calculate the Distance to Shore over the whole data-set, and in real time to streams of AIS data it is mandatory to represent the Coastline in a efficient manner. 
-For this we used the ocean coastline data\footnote{http://naturalearthdata.com}, which represented the Global Ocean Coast line in a vector of \textbf{547.503} points, which is equivalent of representing in a 1:10m scale.
+\label{subsection: Distance to Coast}
+Distance to Shore influences, the navigational behaviour for the major part of Vessel Types. In order to enrich the $BPs$ which will feed the Anomaly Detection modules, and as the distance to shore is without a doubt a valuable aggregation feature for the maritime domain. We extrapolated the Distance to Shore for every received AIS message. 
 
-The calculation of the closest point was done with a Nearest Neighbor approach, using the Ball Tree algorithm. The choice of this algorithm was done, due to the high volume of data we were using, and the possibility of using the Haversine Distance measures \eqref{eq: Haversine} in the already implemented methods from \footnote{http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.BallTree.html}.
+Although in order to calculate the distance to shore effectively either over historical batches of data or in real time to streams of AIS data, a efficient representation of the coastline is needed. 
+For this we used the ocean coastline data\footnote{http://naturalearthdata.com}. This representation has mapped Global coastline in a vector of \textbf{547.503} points, which is equivalent having a 1:10m Global coastline representation.
 
-Haversine is a distance metric commonly used in Vessel Navigation, as both Latitude and Longitude features are represented in a spherical coordinate system. $d_({p_1}, {p_2})$ represents the distance between the 2 point $p1(lat_1, lon_1)$ and $p2(lat_2, lon_2)$, and where $r$ represents the approximate radius of the Earth which we considered \textbf{6.367.000m} in our experiments.
+The calculation of the closest point was done with a Nearest Neighbour approach, using the Ball Tree algorithm. The choice of this algorithm was done, due to the high volume of data we were using, and the possibility of using the Haversine Distance measures in the already implemented methods from \footnote{http://scikit-learn.org/stable/modules/generated/sklearn.neighbors.BallTree.html}.
+
+Haversine is the most commonly used distance metric in the Vessel Navigation. As both Latitude(y) and Longitude(x) features are represented in a spherical coordinate system, the use of the most common Euclidean distance is not applicable. Thus we used the Haversine Equation \ref{eq: Haversine}, represented under.
 
 \begin{equation}
-d = 2r sin ^{-1} (\sqrt{sin^2(\frac{lat_{2}-lat_{1}}{2})+cos(lat_{1})cos(lat_{2})sin^2(\frac{long_{2}-long_{1}}{2}))}
+d = 2r sin ^{-1} \sqrt{sin^2(\frac{lat_{p_2}-lat_{p_1}}{2})+cos(lat_{p_1})cos(lat_{p_2})sin^2(\frac{lon_{p_2}-lon_{p_1}}{2})}
 \label{eq: Haversine}
 \end{equation}
 
-\subsubsection{Distance to Port}
-Distance to Port, represents a feature that can be used in many ways such as  analyzing a Vessel Behaviour, or one that actual represents a great importance to Maritime International Trade, estimating the Vessel Time of Arrival,  \cite{Moussa2018ScalableSpark}, \cite{Rosca2018PredictingRoutes}.
- 
-We then enriched each $Behaviour Point$ by calculating, what was the nearest Port, and what distance it was. This was done, based on the same Methodology presented in Section above. 
+Where $d$ takes as input $({p_1}, {p_2})$, and it calculates the haversine the 2 point represented as $p1(lat_1, lon_1)$ and $p2(lat_2, lon_2)$. $r$ represents the approximate radius of the Earth which for this work we considered \textbf{6.367.000m}.
 
-Although, getting a list of every port was not trivial, as there are numerous Ports around the World, and such information is not 
-centralized nor normalized.
-We accesed the detailed information of the World Port Indexes in \footnote{http://msi.nga.mil/MSISiteContent/StaticFiles/NAV\char`_PUBS/WPI}. The World Port Index data was in a GIS(Geographic Information System) shapefile format, which is common format for the Maritime Domain, but not usable in our Framework, thus we firstly normalized the data format using the Python Package dbfread \footnote{http://dbfread.readthedocs.io}, and storeded the normalized data in our Data-Base. 
-For each of the \textbf{3865} ports we extrated the respective Port position, Country, and Name. 
-In Fig. we present the position of the ports of the Iberian coast in Orange.
+\subsubsection{Distance to Port}
+Distance to Port, to the maritime scenario, and more specifically maritime international trade, represents an additional feature which is of great importance. The Estimation of Time of Arrival presents itself as a necessity for container terminals, as this terminals base operational decisions on such estimation. The estimation of time of arrival, and the prediction of the arrival port based on past vessel trajectory information, are two tasks which use the distance to port feature for such purpose, \cite{Moussa2018ScalableSpark}, \cite{Rosca2018PredictingRoutes}.
+ 
+This being said, we enriched each $Behaviour Point$ by calculating the actual nearest port, and the distance to it. To achieve this, we used a similar approach as explained above in Subsection \ref{subsection: Distance to Coast}.
+
+Although, getting a list of every port was not trivial, as there are numerous ports around the World, and such information is not 
+centralised nor normalised.
+We accessed the detailed information of the World Port Indexes in \footnote{http://msi.nga.mil/MSISiteContent/StaticFiles/NAV\char`_PUBS/WPI}. The World Port Index data was in a GIS(Geographic Information System) shapefile format, which is common format for the Maritime Domain, but not usable in our Framework. Therefore, we firstly normalised the data format using the Python dbfread\footnote{http://dbfread.readthedocs.io}, and then stored the normalised port data in our data-base. 
+For each of the \textbf{3865} ports we extracted the respective Port position, Country, and Name. 
+In Figure \ref{fig: 4 Ports} we present the port position over the Iberian coast in Orange.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale = .9]{figures/Ch4/ports.png}
-    \caption{}
-    \label{fig:asdsadsadasda}
+    \caption{Iberian Ports(in orange), with the considered coastal Points(in Blue)}
+    \label{fig: 4 Ports}
 \end{figure}
-
 
 \subsection{Stopped/Moving}
 \label{subsection: Stopped/Moving}
-Enriching the reported Vessel Kinematics by determining if whether a Vessel is Moving or Stopped represents a information gain on overall Vessel Trajectory that can be addressed, for the understanding of the normal Vessels Behaviour itself and even further, the possible detection of Anomalies.
-Thus, the approaches we used to classify every Vessel transmission as Stopped or Moving is shown in the following subsections:
+Enriching the reported $BPs$ by determining if at this point in time a vessel was in fact moving or stopped represents an overall information gain over the whole vessel trajectory. Such information can be used for the understanding of the normal vessels behaviour, or the detection of global points of interest.
+Thus, in order to gain such information, we used two different method. The first one was a point based approach, where we infer if whether a vessel is stopped or moving based on the last report, this method is described under in this Subsection. The second approach involves the use of a vessels past trajectory information, we present this approach further in this Chapter in Section \ref{subsection: Smoothed Stopped / Moving}.
 
 \textbf{Rule Based Approach}:
-This approach is vastly used in the literature, as it is the simplest way to characterize the stopping of a Vessel, based solely on the Speed or as reported in the AIS the Speed Over Ground (SOG). Thus, Vessels Positions that have a Speed under a certain defined threshold $\Delta$ are considered as Stopped and the opposite are considered Moving, as it is shown in equation \ref{eq: MovingRule}, where $p_n$ represents actual point we want to the point which we want to c.
+This approach is vastly used in the literature, as it is the simplest way to characterise the stopping of a vessel, based solely on the vessels reported speed or as reported by the AIS the Speed Over Ground (SOG). Thus, a $BP$ which has a reported speed under a certain defined threshold $\Delta$ is considered as stopped and the opposite are considered moving. As it is shown in equation \ref{eq: MovingRule}, where $BP_n$ represents actual Behavioural Point we want extrapolate the stopped or moving feature.
+
 \begin{equation}
 kinematic status(p_n) = \left\{\begin{matrix}
-p_n.SOG > \Delta; & Moving\\ 
-p_n.SOG \leq  \Delta; & Stopped
+BP_n.SOG > \Delta; & Moving\\ 
+BP_n.SOG \leq  \Delta; & Stopped
 \end{matrix}\right.
 \label{eq: MovingRule}
 \end{equation}
 
-The most commonly used value, found in the literature for $\Delta$ was 0.5 knots, which was also the Threshold we initially tested for, but we found that this leads to the miss-labeling of effectively Positions that are Moving, more specifically Fishing Vessels that due to their type of fishing activities, greatly slow their Speed for short periods of Time, which cannot be labeled as Stopped.
+The most commonly used $\Delta$ value found in literature was 0.5 knots.
+This approach despite fitting most of the vessels behaviours, for the some types of fishing vessels it does not fit such behaviours. This occurs as some fishing activities, require the vessel to be drastically slow down for short periods of time.
+In Figure XX, we present a fishing vessel trajectory, where points represented in blue are considered as stopped points.   
 \todo[inline]{Need intro to this image, Trajectory of a Shipping Vessel that is considered as stopped. just painting point by point}
 \todo[inline]{Need new Image too...}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = 0.15]{figures/Ch4/simplestopMoving228858000.png}
+	\includegraphics[scale = 0.2]{figures/Ch4/simplestopMoving228858000.png}
     \caption{Vessel 228858000}
     \label{fig: 228858000}
 \end{figure}
 
 \section{Unsupervised Trajectory Extraction}
-In this Section we present our definition our interpretation and formulation of Vessel Trajectory, 
+\label{section: 4 Unsupervised Trajectory Extraction}
+In this Section we present our interpretation and the definition of what was for this work considered as a vessel trajectory. 
+
+\todo[inline]{See if i want to talk about the cassandra...}
 
 \subsection{Trajectory Definition}
-Representing a Vessel Trajectory data, can become a difficulty in the Maritime domain. Currently there are a vast number of solutions described in the literature, presenting different solutions for different types of problems. 
+\label{subsection: Trajectory Definition}
+Representing a trajectory in a optimal way, can become a difficulty task in the maritime domain. Currently there are a vast number of solutions described in the literature. They, represent a trajectory differently, depending on the type of problem.
 
-Our approach to represent a Maritime trajectory, was to consider a trajectory as a whole, this is, as Vessel are obliged to broadcast their AIS information in a semi-continuous rates; by defining a \textbf{Behavioural Point} to each received AIS message, we can aggregate every BP based on the Vessel identifier of each Vessel, thus representing Trajectory as a set BP, represented as 
+Our approach to represent a maritime trajectory, was to consider a trajectory as a whole. This is, as vessel are obliged to broadcast their AIS information in a semi-continuous rates. By normalising each broadcast by defining a \textbf{Behavioural Point}, we can aggregate each $BP$ based on the $BPs$ vessel identifier which is the vessel MMSI. Thus the aggregation of $BPs_{MMSI}$ represents for us a trajectory, which can be represented as:
 \[TR_{MMSI} = BP_{MMSI_1}, BP_{MMSI_2}, BP_{MMSI_3}, BP_{MMSI_4}, \cdots , BP_{MMSI_n}\]
+Every trajectory is then sorted, and kept sorted based on the Time-Stamp of each $BP_{MMSI}$. The representation of the $BPs$ over a time allows us to consider a each trajectory ($TR_{MMSI}$) as a multivariate time-series.
+Each trajectory, can be then defined as a group of $N$ time-series. Where $N$ represents the number of features considered for the $BPs$ definition.
 
-We sort every Trajectory based on the Time-Stamp of each $BP_MMSI$, which allows us to consider a Trajectory into a Multivariate Time-Series. For each Trajectory we have $N$ time-series, in which $N$ represents the number of features considered for each trajectory which is similar to say that is the same number of features each BP has. further explained in the subsections bellow.
-
-%knowing that each AIS broadcast message represent the instantaneous kinematic information from a Single Vessel, aggregating this information over time will represent a Vessel Trajectory. 
-
-%Thus, by identifying each vessel by its unique identifier (MMSI), the trajectory can be considered as the set of AIS messages, identified by the MMSI of each Vessel.
-
-
-%Although, as each AIS message is time-stamped(contains the time in which was broadcast), our representation of trajectory can be defined as 
-
-\subsection{Multivariate Time-Series Analogy}
-As mentioned above, each Trajectory is considered as a Time Series composed of Multiple features.  
-
+Nevertheless, what was considered as most relevant, for our definition of a trajectory was the effectiveness, and scalability of such representation. This is, the effective adding of new $BPs$ to a trajectory, and the accessing of historical trajectories in effective time. We achieved this by implementing the data-base in Cassandra. From such we defined a set of pre-defined queries to which allowed the effective access to a whole or partial trajectory, in near real time.
+In Figure \ref{fig: TrajectorySMM_example} we represent an example of the vessel trajectory which was plotted over a map. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = .3]{figures/Ch3/traj_example.png}
+	\includegraphics[scale = .33]{figures/Ch3/traj_example.png}
     \caption{Trajectory snapshot(2017-11-05 10:22 to 2017-11-05 22:42) from Vessel MMSI: 255806006}
     \label{fig: TrajectorySMM_example}
 \end{figure}
 
 
-in Fig. \ref{fig: MTimeSeries_example}, we represent the Vessel trajectory showend in figure X. 
-For each trajectory we consider the features representing 
-main features that a which in order to normalize our analysis of a Vessel Route, we ...
-\todo[inline]{TODO dar palha para introduzir esta imagem}
+The same trajectory plotted above, is also represented as a multivariate time-series, in Figure \ref{fig: MTimeSeries_example}, by just considering the four most relevant kinematic features of a $BP$, the positional features (where $x$ represents the Longitude, and $y$ represents the Latitude) and the speed and course features. 
+
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = .5]{figures/Ch3/ts_example.png}
-    \caption{Trajectory represented in Fig.X, presented as a Multivariate Time Series.}
+	\includegraphics[scale = .52]{figures/Ch3/ts_example.png}
+    \caption{Trajectory represented in Figure \ref{fig: TrajectorySMM_example}, presented as a multivariate time-series.}
     \label{fig: MTimeSeries_example}
 \end{figure}
 
-\todo[inline]{Needs Intro for this section...}
-
 \subsection{Smoothed Stopped / Moving}
 \label{subsection: Smoothed Stopped / Moving}
-\todo[inline]{TALK ABOUT THE feature}
+In order to resolve the problem presented in Section \ref{subsection: Stopped/Moving}, where the rule based stopped/moving approach had problems when dealing with some type of fishing activity trajectories. 
+And also as a trajectory could be overseen as a multivariate time-series. We used a commonly used time-series analysis technique, \emph{Rolling Mean}. 
+By smoothing the vessels $SoG$ time-series, based on the previous configurable $W$ $BPs$, where $W$ represent the window size considered. We smooth the random or abrupt variations in the observed speed features, which will in the end better describe the kinematic movement behaviour presented by these fishing vessels. 
+The configurable $W$, allows the end-used of this framework, to configure the smoothness of the over the reported speed feature. This ultimately leads to a better representation of the vessel kinematics, which will be used for the anomaly detection methods presented in Subsection \ref{subsection: 4 Time-Space Incompatibility}, \ref{subsection: 4 Navigational Status Validation} and \ref{subsection: 4 Vessel Rendezvous}.
 
-In order to mitigate the problem described in Section \ref{subsection: Stopped/Moving} we used a smoothing technique \textbf{Rolling Mean}, which is a common method used in Time Series Analysis. 
-By Smoothing the Vessels $SoG$, based on the previous BP of each Vessel we reduce the random or abrupt variations in the observed Speed features, which ultimately leads to a better representation of the Vessels Kinematics.
-\todo[inline]{Need intro to this image}
-
+\todo[inline]{Need intro to this image MAYBE I PUT 2 SOG time series.}
 \missingfigure{Trajectory of a Shipping Vessel that is considered as stopped then with the rolling mean!}
 
-\subsection{Time-Space Incompatibility}
-Time Space incompatible corresponds to an anomalous or incoherent situation where the reported actual Vessels position is not compatible if compared with previous reported positions, and Vessels Kinematics. The detection of this situation, is also represented as an Anomaly Requirement ($AR_4$), in Section\ref{section: Framework Requirements}.
+%the enfacis was on the  allowing the End-User to configure the $dft$ the granularity of the Incoherence Position reporting will be changed. And for this work we fo
 
-In order to detect this incoherence's, we developed a Method that takes as input an historical Vessels Trajectory $TR_{MMSI}$, and for each Behavioural Point ${BP_{MMSI}}^{T-1}$ we estimate the position of the Vessel at instance ${BP_{MMSI}}^{T}$.
-The estimation is done by assuming that a Vessels Movement can be represented in a \textbf{Linear Motion}, as most of the Vessels tend to move in the most economical way, thus the Vessels traveled distance, can be calculated, using the formula :
+%representative of what a Vessel would travel based on the reported characteristics, based on a representing we can excan assume that defining a Distance Threshold,
+
+
+\section{Anomaly Detection Service}
+
+\subsection{Time-Space Incompatibility}
+\label{subsection: 4 Time-Space Incompatibility}
+Time Space incompatible corresponds to an anomalous or incoherent situation where the reported actual Vessels position is not compatible if compared with previous reported positions, and Vessels Kinematics. The detection of this situation, is also represented as an Anomaly Requirement \emph{$AR_4$}, in Section \ref{section: Framework Requirements}.
+
+In order to detect this incoherence's, we developed a method that takes as input an historical vessels trajectory $TR_{MMSI}$, and for each Behavioural Point ${BP_{MMSI}}^{T-1}$ we estimate the vessels position at instance ${BP_{MMSI}}^{T}$.
+The estimation is done by assuming that a vessels movement can be represented in a \emph{Linear Motion}. As vessels tend to move in the most economical way, the Vessels travelled distance, was calculated, using the formula:
 \begin{equation}
 Distance = Velocity . \Delta Time
 \label{eq: dvt}
@@ -264,29 +283,16 @@ By calculating the equation \ref{eq: dvt} for each $BP^{T}$ based on the reporte
     \label{fig: dvt}
 \end{figure}
 
-By defining a configurable Distance Factor Threshold $dft$, representing a factor that would be multiplied by $D$, is possible to deduct that, if the a Vessel at Time $BP^{T}$ is at a distance superior than $(D.dft)$, it is considered at a incoherent position, thus it is reported as Anomalous.
+By defining a configurable \emph{Distance Factor Threshold} $dft$, representing a factor that would be multiplied by $D$, is possible to deduct that, if the a vessel at Time $BP^{T}$ is at a distance superior than $(D.dft)$, it is considered at a incoherent position. Therefore it is reported as anomalous.
 
-The emphasis of this Section was on the detection of Time-Space Incompatibly, which is achieved using the methods above. Although by assuming that Vessels have a huge inertia, making them unable to perform quick changes of not only speed but also direction, the authors in \cite{Sadowski2015AlgorithmsCompression} present a \textbf{Linear Estimation Algorithm}.
-As the reported $CoG$ represents the direction of movement, it is possible to Equation \ref{eq: dvt}, thus estimating the actual position of the Vessel, opposed to the Distance from previous Position. 
+The emphasis of this Section was on the detection of Time-Space Incompatibly, which is depend on the level of error acceptance is achieved using the methods above. 
+Although by assuming that vessels have a huge inertia, making them unable to perform quick changes of speed and direction, the authors in \cite{Sadowski2015AlgorithmsCompression} present a \emph{Linear Estimation Algorithm}.
+As the reported $CoG$ represents the direction of movement, it is possible to Equation \ref{eq: dvt}, thus estimating the actual position of the Vessel, opposed to the Distance from previous Position. \todo{see if i put this here}The accurate estimation of a vessels position based on past trajectory information was left for future work. 
 
-\iffalse
-
-the enfacis was on the  allowing the End-User to configure the $dft$ the granularity of the Incoherence Position reporting will be changed. And for this work we fo
-
-representative of what a Vessel would travel based on the reported characteristics, based on a representing we can excan assume that defining a Distance Threshold,
-
-the simple based on a Linear estimation of the Vessels Kinematics, which is similar 
-The detection of this situation for our Framework, is used for two main objectives, the detection of the anomaly itself, and for the partitioning of Trajectories which is explain under in Section XX.
-\fi
-
-
-
-
-\section{Anomaly Detection Service}
 
 \subsection{Navigational Status Validation}
-AIS Navigational Status describes the Vessel current navigational activity based on a set static set of defined Status, as shown in Table XX. The Navigational Status needs to be manually set, and constantly updated (according to the current Vessel activity), by the Vessel crew members. 
-The problem with relying on Human action to update the actual Vessel Navigational Status is that is really prone to errors. 
+\label{subsection: 4 Navigational Status Validation}
+AIS Navigational Status describes the vessel current activity based on a set static set of defined status, as shown in Table XX.
 
 \begin{table}[H]
 \centering
@@ -298,7 +304,7 @@ The problem with relying on Human action to update the actual Vessel Navigationa
 0 & under way using engine \\
 1 & at anchor \\
 2 & not under command \\
-3 & restricted maneuverability \\
+3 & restricted manoeuvrability \\
 4 & constrained by draught \\
 5 & moored \\
 6 & aground \\
@@ -309,11 +315,10 @@ The problem with relying on Human action to update the actual Vessel Navigationa
 \end{tabular}
 \end{table}
 
-The use of the wrong Navigational Status being considered an Anomaly, $(AR_4)$, our approach towards the detection of this Anomaly, started by firstly analyzing the use of each Navigational Status. 
-
-With the help of Maritime Officers Expertise, we enriched our Description from each Navigational Status, be classifying the appropriate \textbf{Stopped or Moving Label} to each Navigational Status. Maritime Experts, based on what the Navigational Status Kinematics should represent provided the following
-Table\ref{Table: AIS Status Moving or Stopped}.
-
+The Navigational Status requires to be manually set, and constantly updated (according to the current vessel activity), by the vessel crew members.
+This creates the problem of relying on Human action to update the actual vessel navigational status, which is prone to errors. 
+The use of the wrong navigational status being considered an Anomaly represented as $(AR_4)$ in Section \ref{section: Framework Requirements}, our approach towards the detection of such Anomaly, started by firstly gaining insight of each navigational status, and their usage at seas.
+By accessing maritime knowledge via Maritime Officers, we enriched our previous description of each navigational status, by classifying the appropriate \emph{Stopped or Moving Label} to each status. Maritime Officers based the expected kinematics of each navigational status provided the following Table \ref{Table: AIS Status Moving or Stopped}.
 \begin{table}[H]
 \centering
 \caption{My caption}
@@ -399,7 +404,10 @@ but for the purpose of this work, define fishing as the time-period when a Vesse
 
 By knowing anyting apriory of a Vessel Trajectory, we clu
 \fi
+
+
 \subsection{Vessel Rendezvous}
+\label{subsection: 4 Vessel Rendezvous}
 A requirement imposed by the MARISA project, was the development of services, able to detect and generate alarms when two or more vessels are approaching close to each other. This in the maritime world can be called as rendezvous.
 
 The concept of rendezvous in the Maritime world is quite complex, as there are numerous legislation. For the purpose of this work, and because the emphasis is on the alarm generation of possible rendezvous, a simplification of this definition is assumed, therefore: 
@@ -429,7 +437,8 @@ While is obvious that the routes are similar in a positional way, they occur at 
 %-----------RB-ADS-----------
 
 \section{Rule Based Anomaly Detection Service}
-A Rule is defined as something that can, at least in the way we approach them, be expressed as an if-then sentence, \cite{Edlund2006titleRule-basedSurveillance/title}
+\label{section: 4 Rule Based Anomaly Detection}
+A Rule is defined as something that can, at least in the way we approach them, be expressed as an if-then sentence, \cite{Edlund2006RuleSea-Surveillance}
 Anomaly Detection based on the definition of rules, is extremely used in the literature, as it represents an effective way to detect Anomalies at seas. Although this in only viable if and only if the rules are defined by Subject Matter Experts (SMEs) \cite{Boinepalli2014AAlgorithm, Will2011FastProcesses}.
 
 Rule Based Anomaly Detection Service, was developed to detect Anomalies that can be codified into a rule or a set of rules, in real-time. 
@@ -452,6 +461,7 @@ Rule-Based Anomaly Detection Service, allows a detection of Anomalies based on l
 For this work we decided to focus on the creation of configurable Rules that could detect the Anomalies presented in Section XX, as were the Anomalies that would be Validated by Maritime Officers,  which we present in Subsections Under.
 
 \subsection{Speed}
+\label{subsection: 4 Speed}
 Speed represents a Set of configurable Rules that were implemented to detect the Anomaly, $(AR_2)$, defined in Section XX.
 
 Our first approach for the detection of an \textit{Abnormal Change of Velocity} was, calculating the $SoG$ difference from the latest received, $BP^T$ with the previous $BPs^{T-1}$, stored in the Vessel Queue.
@@ -465,6 +475,7 @@ Although, calculating the $SoG$ difference was only viable if  $N = 2 $ was cons
 When considering more than two $BPs$ the difference is not representative of the actual \textit{Abnormal Change of Speed}, in order to mitigate this we created a new configuration, representing the operation it should be done in this case, which for this anomaly we considered the Average Difference, the Max Difference.
 
 \subsection{Course}
+\label{subsection: 4 Course}
 Similar the \textbf{Speed} defined above, Course represents a Set of configurable Rules implemented for the Anomaly detection, of $(AR_1)$, which is the \textit{Detection of Abnormal change of Direction}. 
 Our approach for the detection of $(AR_1)$ was quite similar to the {Detection abnormal change of Velocity}. 
 Although, we noticed depending how Vessels are Moored at port\footnote{http://marineinsight.com/marine-navigation/mooring-methods-ships/}  Vessels tend to swing, due to the Sea Currents, or just from the movement of other Vessels moving in Ports. This creates abrupt changes of $CoG$, which are not representative of the Anomaly Requirement $(AR_1)$.
@@ -474,6 +485,7 @@ In order to mitigate this problem, we defined other configurable condition, Mini
 \[ If\; abs(MQ_{T}.CoG - MQ_{T-1}.CoG)\;and\; MQ_T.SoG > S\; then\; Anonalous.\]
 
 \subsection{AIS Signal Loss}
+\label{subsection: 4 AIS Signal Loss}
 The \textit{disappearance from sensor coverage for more than a configurable Time Period}, $(AR_3)$, can be caused for numerous reason as it is mentioned in Section XX. From a data stand point the disappearance from sensor coverage is represented as the loss of signal, or in other words, the non reception of AIS messages from this Vessel for more than $M$ Minutes.
 
 In this work, we detect the loss of signal from Vessel, by analyzing when did a certain Vessel transmitted for the last time. This is done in real time, by the RBADS by one of two ways: the A priori way or the posteriori way.
