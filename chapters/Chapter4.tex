@@ -321,7 +321,7 @@ The use of the wrong navigational status being considered an Anomaly represented
 By accessing maritime knowledge via Maritime Officers, we enriched our previous description of each navigational status, by classifying the appropriate \emph{Stopped or Moving Label} to each status. Maritime Officers based the expected kinematics of each navigational status provided the following Table \ref{Table: AIS Status Moving or Stopped}.
 \begin{table}[H]
 \centering
-\caption{My caption}
+\caption{Expert stopped or moving label over the AIS navigational status.}
 \label{Table: AIS Status Moving or Stopped}
 \begin{tabular}{lc}
 \hline
@@ -331,14 +331,13 @@ Moving           & 0, 7*, 8                   \\
 Non-Quantifiable & 2, 3, 4, 15                \\ \hline
 \end{tabular}
 \end{table}
-$7^*$(the Engaged at Fishing) represents a Special Navigational Status which cannot be validated by a Stopped or Moving Analysis. The Validation of this specific Status is done in Subsection under, Section \ref{subsection: Fishing Activity Detection}.
+$7^*$ (Engaged at Fishing) represents a special navigational status which cannot be validated with a stopped or moving analysis. Our efforts to validate this specific status are presented under in Subsection \ref{subsection: Fishing Activity Detection}.
 
-The actual Navigational Status Validation, is done as a Point Based Comparison. By comparing the enriched Feature \textit{Smoothed Stopped or Moving}(Section \ref{subsection: Smoothed Stopped / Moving}) with the Label the Maritime Expert has defined for the Navigational Status, reported for each $BP$.
+The actual navigational status validation, is done as a \emph{point based comparison}. By comparing the previous $BPs$ enriched feature \emph{Smoothed Stopped or Moving}(Section \ref{subsection: Smoothed Stopped / Moving}) with the stopped/moving label Maritime Experts has defined for each Navigational Status.
 An example for this validation could be:
-
 If a $BP$ has been received with the Navigational Status \textit{0 - under way using engine}, but the reported Kinematics describe it as \textit{Stopped}, which for this Status should be \textit{Moving}.
 \iffalse
-labeled as a , but the reported Navigational Status , this is the Navigational Status which is labeled has Moving, it means the $BP$ was broadcast with the Wrong Navigational Status, or represents that the Vessel should be Moving, 
+labelled as a , but the reported Navigational Status , this is the Navigational Status which is labelled has Moving, it means the $BP$ was broadcast with the Wrong Navigational Status, or represents that the Vessel should be Moving, 
 
 By determining based on the reported AIS kinematic features, if a Vessel is in fact Stopped or Moving as it is demonstrated in Section XX. By comparing the compared reported Navigational Status against what was the Kinematic
 
@@ -361,7 +360,7 @@ being considered Anomalous, our approach towards the detection of this
 
 Based on the Navigational Status Validation presented above we decided to enrich this validation with the detection of Special Navigational Status, the Fishing activity (Navigational Status - 7 - Engaged in Fishing). 
 
-The Fishing activity is a activity much profitable for the global Maritime Scenario. This activity being profitable and competitive betwhen Fishing Companies, generates a problem for the Maritime Authorities. Fishing Vessel try to hide their "fishing spots" from other Fishing Vessels as most as their can. Although this type of behaviour leads to ilegal activities   and the AIS being broadcast for other Vessels, i
+The Fishing activity is a activity much profitable for the global Maritime Scenario. This activity being profitable and competitive between Fishing Companies, generates a problem for the Maritime Authorities. Fishing Vessel try to hide their "fishing spots" from other Fishing Vessels as most as their can. Although this type of behaviour leads to ilegal activities   and the AIS being broadcast for other Vessels, i
 
 
 , which cannot Special Navigational Status, which is also a Special 
