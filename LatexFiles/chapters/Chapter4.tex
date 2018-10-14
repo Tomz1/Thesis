@@ -101,7 +101,7 @@ Each $BP$, as described above is further enriched by extrapolating three additio
 
 \[BP_{MMSI} = [t, x, y, SoG, CoG, NS, VT, DtS, DtP, PN]\]
 
-Where the additional features \emph{VT, DtS, DtP, PN} representing the Vessel Type, Distance to Port, Distance to Shore, Port Name. These features are not reported from every AIS messages and need to be extrapolated afterwards. The methods used to extrapolated this features are presented under (Section \ref{section: 4 Feature Engineering)}. 
+Where the additional features \emph{VT, DtS, DtP, PN} representing the Vessel Type, Distance to Port, Distance to Shore, Port Name. These features are not reported from every AIS messages and need to be extrapolated afterwards. The methods used to extrapolated this features are presented under (Section \ref{section: 4 Feature Engineering}. 
 
 \section{Feature Engineering}
 \label{section: 4 Feature Engineering}
@@ -369,14 +369,14 @@ we decided in order to enrich the functionalities of the Navigational Status Det
 
 Vessel Fishing activity is commonly defined as the period of time when the Vessel has the fishing gear on the water. 
 
-Although for the purpose of this work, and as we currently didn't had access to any Maritime Expert Classified Data-Sets that allowed the development of this task in a Supervised Manner, as it is presented by the authors in \cite{DeSouza2016ImprovingLearning}, we decided to generalize the definition of Fishing Activity.
+Although for the purpose of this work, and as we currently didn't had access to any Maritime Expert Classified Data-Sets that allowed the development of this task in a Supervised Manner, as it is presented by the authors in \cite{DeSouza2016ImprovingLearning}, we decided to generalise the definition of Fishing Activity.
 Thus for this work, fishing activity is defined as the activity which could be detected based on kinematic features reported from Fishing Vessels, that Could induce the Vessels is currently Fishing. 
 
-To tackle this problem, we firstly created a Sub-Set of possible Fishing $BPs$, and secoundly analyzed how the Fishing Activity would impact the reported Kinematic features, as presented by authors in XX the main characteristic that identifies the fishing activity is the fast variation of direction together with a change in the speed.
+To tackle this problem, we firstly created a Sub-Set of possible Fishing $BPs$, and secondly analysed how the Fishing Activity would impact the reported Kinematic features, as presented by authors in XX the main characteristic that identifies the fishing activity is the fast variation of direction together with a change in the speed.
 
 By filtering from the already processed Data-Set, the $BPs$ that were from Fishing Vessels, Vessel Type 30 we end up with XXXX M Messages from XXX Vessels... To avoid irregular Vessel movement,  and just analyze the Vessel movement patterns, that could induce the Vessel Fishing activity, we filtered the $BPs$ that would be a distance of less than one Nautical Mile, from shore, leading to a sub Data-Set of XXXX possible Fishing $BPs$.
 
-From the Sub-Set of possible Fishing $BPs$, we analyzed started by analyzing the Speed Over Ground feature, and how would  
+From the Sub-Set of possible Fishing $BPs$, we analysed started by analysing the Speed Over Ground feature, and how would  
 
 
 
@@ -443,14 +443,14 @@ Anomaly Detection based on the definition of rules, is extremely used in the lit
 Rule Based Anomaly Detection Service, was developed to detect Anomalies that can be codified into a rule or a set of rules, in real-time. 
 Our approach to detect Anomalies in real-time was by storing the $N$ last Behavioural Points for each Vessel in a Service Cache, working like a first in first out (FIFO) queue. $N$ is a configurable Value, which represents the limit of messages stored in Service Cache for each Vessel, we provide an intuitively way to reduce the hardware requirements to run this service in Real-Time.
 
-When the Service Cache has stored $N$ $BPs$ for a certain Vessel the Rule Based Anomaly Service is called for this Vessel, as demonstrated in Figure\ref{fig: RBADS}, in Vessel MMSI n case.
+When the Service Cache has stored $N$ $BPs$ for a certain Vessel the Rule Based Anomaly Service is called for this Vessel, as demonstrated in Figure\ref{fig: RB-ADS}, in Vessel MMSI n case.
 If a Vessel queue has $N$ $BPs$, and was the Rule Based Anomaly Service was already called of this messages, all Vessel Service Cache being FIFO, we discard the oldest $BPs$, thus the Vessel Queue after is full for the first time it as always $N$.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale = .36]{figures/Ch4/RBADS.pdf}
-    \caption{Demonstration of a possible cases for RBADS Service Cache coordinator.}
-    \label{fig: RBADS}
+	\includegraphics[scale = .36]{figures/Ch4/RB-ADS.pdf}
+    \caption{Demonstration of a possible cases for RB-ADS Service Cache coordinator.}
+    \label{fig: RB-ADS}
 \end{figure}
 
 Rule-Based Anomaly Detection Service, allows a detection of Anomalies based on little previous knowledge of each Vessel Trajectory. Despite the Service could be configured with any Rule that could be written for either Temporal, Spatial or Features based Rules, for example:
@@ -487,7 +487,7 @@ In order to mitigate this problem, we defined other configurable condition, Mini
 \label{subsection: 4 AIS Signal Loss}
 The \textit{disappearance from sensor coverage for more than a configurable Time Period}, $(AR_3)$, can be caused for numerous reason as it is mentioned in Section XX. From a data stand point the disappearance from sensor coverage is represented as the loss of signal, or in other words, the non reception of AIS messages from this Vessel for more than $M$ Minutes.
 
-In this work, we detect the loss of signal from Vessel, by analyzing when did a certain Vessel transmitted for the last time. This is done in real time, by the RBADS by one of two ways: the A priori way or the posteriori way.
+In this work, we detect the loss of signal from Vessel, by analyzing when did a certain Vessel transmitted for the last time. This is done in real time, by the RB-ADS by one of two ways: the A priori way or the posteriori way.
 
 First, as we store the Last $N$ $BPs$ for each Vessel that we received AIS messages from, in a the respective Message Queue from the Service Cache. By calculating the difference between the the last received ${BP_{MMSI}}^T$ to the ${BP_{MMSI}}^T-1$, we can know what was the elapsed time. Therefore, if this elapsed Time is bigger than a configurable Time $M$, this is reported as Anomaly. This method is considered a posteriori, as we are waiting for a new message to generate a Signal Loss Anomaly.
 

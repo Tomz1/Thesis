@@ -38,7 +38,7 @@ As mention previously, requirements for this work were distinguished from anomal
 
 \emph{The developed Framework, must be able to ingest fuse and store different sources of maritime Data, while also handling enormous workflows of data in real-time.}
 
-\section{Proposed Framework}
+\section{Modular Vessel Anomaly Detection Framework}
 In order to develop a Framework capable of achieving the requirements defined above in \ref{section: Framework Requirements}, we propose the Modular Vessel Anomaly Detection Framework. The \emph{MAD-F} is able to ingest data from different feeds in real-time data while simultaneously constructing a Data-Base for Vessels Trajectories in a unsupervised manner. Anomalies are then detected in a offline manner from the saved trajectory data, or online in real time addressing the incoming streams of Vessel Data. 
 The framework was developed to be modular as there are either no inputs or outputs standards for the Maritime Domains. Thus, by providing a configurable and not static framework, we give the configuration flexibility for the \emph{MAD-F} being configured for different scenarios or even different National Maritime Authorities, or even to new Modules being added in the future.
 In Figure \ref{fig:Framework} we present the architecture of the \emph{MAD-F} and the following subsections will discuss each of the framework modules: Data Ingestion, Data Pre-processing, Feature Engineering, Trajectory Extraction and both anomaly detection modules : Anomaly Detection Service and Rule Based Anomaly Detection Service.
