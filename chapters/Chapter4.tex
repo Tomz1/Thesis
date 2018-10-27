@@ -93,9 +93,9 @@ Therefore, we discarded all AIS messages with reported features that were not in
 Behavioural Point for this work, is our normalised feature representation of incoming vessel data. A $BP$ is a multidimensional point which is identified by the vessel id who produced the reported message. Therfore a $BP_{MMSI}$ can be represented as:
 
 \[BP_{MMSI} = [t, x, y, SoG, CoG, NS]\]
-\todo[inline]{HAVE REFS MISSING TRY TO FIND!!!}
+
 Where the dimensions of the multidimensional $BP$ represents the features (Time, Longitude, Latitude, Speed Over Ground, Course Over Ground and Navigational Status) respectively.
-Each $BP$ was correlated to one(one to one) identifier. The used identifier for this work was the Maritime Mobile Service Identity (MMSI). This choice represents certain problems, as it is mentioned by the author in XX and further discussed in Experiment XX (Section XX). Although, the non replication of the MMSI by different vessel was assumed for work. As this problem can be solved by the AIS provider, thus not occurring with every AIS provider. 
+Each $BP$ was correlated to one (one to one) identifier. The used identifier for this work was the Maritime Mobile Service Identity (MMSI). For this work the non replication of the MMSI by different vessel was assumed for work, this problem is discussed in Section\ref{subsection: Data Ingestion}.
 Each $BP$, as described above is further enriched by extrapolating three additional features, making each $BP$ to be represented as:
 
 \[BP_{MMSI} = [t, x, y, SoG, CoG, NS, VT, DtS, DtP, PN]\]
@@ -279,7 +279,10 @@ By defining a configurable \emph{Distance Factor Threshold} $dft$, representing 
 
 The emphasis of this Section was on the detection of Time-Space Incompatibly, which is depend on the level of error acceptance is achieved using the methods above. 
 Although by assuming that vessels have a huge inertia, making them unable to perform quick changes of speed and direction, the authors in \cite{Sadowski2015AlgorithmsCompression} present a \emph{Linear Estimation Algorithm}.
-As the reported $CoG$ represents the direction of movement, it is possible to Equation \ref{eq: dvt}, thus estimating the actual position of the Vessel, opposed to the Distance from previous Position. %\todo{see if i put this here}The accurate estimation of a vessels position based on past trajectory information was left for future work. 
+As the reported $CoG$ represents the direction of movement, it is possible to enrich Equation~\ref{eq: dvt}, thus estimating the actual position of the Vessel, opposed to the Distance from previous Position. This is done by 
+
+
+%\todo{see if i put this here}The accurate estimation of a vessels position based on past trajectory information was left for future work. 
 
 \subsection{Navigational Status Validation}
 \label{subsection: 4 Navigational Status Validation}
@@ -362,28 +365,26 @@ Nevertheless, the concept of rendezvous is still quite complex to formalise by m
 
 ~\emph{Vessel Rendezvous}, is then defined for this work as, the interception or closeness of two or more vessels, in a configurable time period.
 
+%by defining a distance threshold~\textbf{d}
 
-Algorithm XXXXX, describes the implemented process in a algorithm way. Defining a distance threshold~\textbf{d}, each single trajectory is partitioned into time-groups (e.g. a time-group of 5min)~\textbf{t}, defined also as a parameter. If two or more vessels, are in the same~\textbf{t}, the Haversine distance between these vessels is calculated, using the the FormulaXXXXX. If the calculated distance is smaller than~\textbf{d}, an anomaly is generated for those two vessels.
+In order to detect the rendezvous occurrences from multiple vessels, each single trajectory is partitioned into~\textbf{t} time-groups e.g. a time-group of 5min. Thus for each rendezvous analysis the maximum number of comparisons are the number of~\textbf{t} is defined by the trajectory with the oldest stored $BPs$.  
 
-The algorithm was implemented in such way, that the scale of approximations made could be controlled by the input configurations. But also, allow the input configurations defined the dimensionality of the problem. As when defining the time-groups size~\textbf{t}, this in fact determines the size of~\emph{N}, but also determines the granularity of the detection.
+After all trajectories are grouped into $N$ time groups of size $t$, for each time group, if two or more vessels have reported in the same time-group, the Haversine distance(Formula~\ref{eq: Haversine}) between every combination of two vessels is calculated. If the any \textbf{C2} calculated distance is smaller than~\textbf{d}, an rendezvous anomaly is generated for those two vessels. \textbf{d} represents a configurable distance threshold for a rendezvous occurrence.
 
-Figure~\ref{fig: VesselRendevouz2d}, shows two different Vessel Routes, with the axis representing the X and Y coordinate, respectively.
+The method was implemented in such way, that the scale of approximations made could be controlled by the input configurations. But also, allow the input configurations defined the dimensionality of the problem. As when defining the time-groups size~\textbf{t}, this in fact defines the number of group validations will be calculated, but also determines the granularity of the detection.
 
-\begin{figure}[H]
-\centering
-\includegraphics[scale = .8]{figures/VesselRendevouz2d}
-\caption{Two vessel routes}
-\label{fig: VesselRendevouz2d}
-\end{figure}
-
-While is obvious that the routes are similar in a positional way, they occur at different times, as is can be see in the figure ~\ref{fig: VesselRendevouz3d} .
+Figure~\ref{fig:  Ch4 VesselRendevouz}(Left), shows two different vessel trajectories. While is obvious that the routes are similar in a positional way, they occur at different times, as is can be see in the figure ~\ref{fig: Ch4 VesselRendevouz}(Right).
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale = .9]{figures/VesselRendevouz3d}
-\caption{Two vessel routes, time on Z-axis}
-\label{fig: VesselRendevouz3d}
+\includegraphics[width=\textwidth]{figures/Ch4/VesselRendevouz.png}
+\caption{Routes of MMSI: 413104010 and 432000385; axes representing (lat.,long.)[Left]
+and (lat.,long.,time)[Right]}
+\label{fig: Ch4 VesselRendevouz}
 \end{figure}
+
+
+
 
 %-----------RB-ADS-----------
 

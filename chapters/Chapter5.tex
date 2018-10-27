@@ -3,7 +3,9 @@
 \lhead{Chapter 5. \emph{MAD-F Evaluation}}
 
 In this Chapter, we present a group of experiments on the MAD-F capabilities. Firstly, we undertake data ingestion and storage performance test, which is followed by a exploratory analysis of the gathered data. Secondly we validate each of the ADS modules, starting with the RB-ADS Experiment, where the data that was collected previously is Experiment is injected in this module with the help of a simulator. After an Experiment over the ADS is conducted, where for each of the anomalies that are detected we provide and exploratory analysis of the results.
-The \emph{validation} of the results presented in this Chapter, can only truly be done by Maritime Officer. What is to be called as anomalies in this work must not be interpreted as an actual maritime illegality, but only as a possible anomaly, which needs always to be validated by Maritime Officer.
+The \emph{validation} of the results presented in this Chapter, can only truly be done by Maritime Officer. What is to be called as anomalies in this work must not be interpreted as an actual maritime illegality, but only as a possible anomaly, which needs always to be validated by Maritime Officer. The real validation of the developed MAD-F will be done by the project end-users the Maritime Experts. \textsc{Marisa} being an highly collaborative undergoing project, such validation at the time of writing this dissertation were still to occur. The validation of the MAD-F by the project end users is described under in Section~\ref{Section: 5 Marisa Validation}. 
+
+All the experiments under were conduted 
 
 \todo[inline]{falta mais a parte da validacao por o projecto...}
 \todo[inline]{JF - fala que vai existir dentro do proj piloto(trials i guess) feito pela marinah o que vai acontecer mais tarde.}
@@ -198,26 +200,22 @@ Although, after analysing the results, this results did exactly what the method 
 What was discovered from this grouping of consequent anomalies was that, with the configuration parameters \textbf{C4}, only \textbf{75} combinations of two vessels generated rendezvous anomalies. Although each combination of vessels generated multiple times rendezvous occurrences, with some combinations generating up to \textbf{7436} times.
 
 After analysing the frequency of occurrence, we analysed the location where the possible rendezvous had occurred. This led us to conclude that most of the detected rendezvous occurrences occurred nearby port.
-As the only truly way to validate the results was by providing this results to a Maritime Officer which could not be achieved for the sole purpose of this present work. We decided to represent the Rendezvous occurrences which we detected on a distance of above 2 KM of the closest Port, thus creating a footprint of the possible Rendezvous occurrences for the whole data-set. A similar analysis is done by the authors in~\cite{Miller2018IdentifyingBehavior}. 
+As the only truly way to validate the results was by providing this results to a Maritime Officer which could not be achieved for the sole purpose of this present work. We decided to represent the Rendezvous occurrences which we detected on a distance of above 2 Km of the closest Port, thus creating a footprint of the possible Rendezvous occurrences for the whole data-set. A similar analysis is done by the authors in~\cite{Miller2018IdentifyingBehavior}. 
 
-As vessels being close to each-other inside a port is not anomalous, and brings no value to the Maritime Officers, we analysed the distance to port from the detected rendezvous occurrences. 
-In TableXXXX%~\ref{Table: 5 Distance to Port Rendevouz} we present the distance distribution, from the.
+In Figure~\ref{fig: Chapter 5 Rend2Mapsr}, we present the a visual representation of the locations where the Rendezvous anomaly occurrence, from the area near the port of Brest(France). By displaying only the rendezvous events that occurred 2Km away from the closest port, the number of rendezvous occurrences is significantly reduced, it is possible to visualise in Figure~\ref{fig: Chapter 5 Rend2Mapsr}(Right). Nevertheless, as the a port for this work was considered as a single point, and a port can be way larger than just a single point. Filtering by the distance to port, by just considering as a point can cause a occurrence to not be filtered as sill in port. This problem will be addressed for Future Work.
+
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale = .8]{figures/Ch5/ThesisExpRend.pdf}
-    \caption{Rendezvoused results, on the left XX and right YY.count XXXXTODO}
+    \caption{Rendezvoused results, on the left no distance filter is applied and in right 2Km distance to port is applied.}
     \label{fig: Chapter 5 Rend2Mapsr}
 \end{figure}
 
 
-we present down in Fig XX a frequency study of the repetition of rendezvous occurrences.
-
-the it is possible to see that as the lower the 
-What we realised that 
-The occurrences based in the Distance to Port, show that 20\% of the detected Rendezvous occurrences occur at Distance less than 500 Meters to Port. 
-
-\todo[inline]{TEM COISAS PARA ACABAR AQUI ANTES}
+%As vessels being close to each-other inside a port is not anomalous, and brings no value to the Maritime Officers, we analysed the distance to port from the detected rendezvous occurrences. 
+%In TableXXXX%~\ref{Table: 5 Distance to Port Rendevouz} we present the distance distribution, from the.
+%The occurrences based in the Distance to Port, show that 20\% of the detected Rendezvous occurrences occur at Distance less than 500 Meters to Port. 
 
 \subsection{ADS - Time Space Incompatibility Experiment}
 \label{subsection: ADS - Time Space Incompatibility Experiment}
@@ -338,7 +336,7 @@ Other & 90 & 92,576 \\ \bottomrule
 \end{tabular}
 \end{table}
 
-After this initial analysis, we applied a fishing navigational status validation, by classifying the reported engaged at fishing $BPs$ into a steaming (high speed) or fishing (low speed) classification and comparing this results with a stopped or moving classification(using the same methodology presented in the subsection above).
+After this initial analysis, we applied a fishing navigational status validation, by classifying the reported engaged at fishing $BPs$ into a steaming (high speed) or fishing (low speed). From this results we further analyse classification and comparing this results with a stopped or moving classification(using the same methodology presented in the subsection above).
 
 total 3040306
 not fishing 1487490
@@ -346,11 +344,12 @@ fishing 1552816
 
 
 \section{Marisa Validation Trials}
+\label{Section: 5 Marisa Validation}
 This section presents how the validation of the developed MAD-F will occur. The evaluation presented above serves as our own analysis and examination of the results produced by the developed MAD-F. Although with the present work being developed under a highly collaborative project, in order for any method to be truly validated, these must be evaluated under the project context. In the \textsc{Marisa} this is achieved by involving the different partners into what was defined in the project as \textbf{Trials}. A Trial represents a defined operational scenario where the project end-users will test the developed \textsc{Marisa} services. Thus for this present work, the ultimate validation of the developed MAD-F, will be done via the project Trials. By aggregating the users by region of activity five different Trials were defined for the Marisa Project, which will all still occur till the end of this $2018$. Inov will be present in three of these Trials, although for the purpose of this present work we will describe the Trial were Inov contributed more to the preparation of the Iberian Trial. The Iberian Trial will be conducted by the Portuguese Navy and the Spanish Guarda Civil, and will involve Inov and more NUMEROXX project partners. This will occur during the first fortnight of November, around the region of Algarve(Portugal), as it is presented in Figure~\ref{fig: 5 TrialArea}.  
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=1.2]{figures/Ch5/IberainTrial.pdf}
+	\includegraphics[scale=1.3]{figures/Ch5/IberainTrial.pdf}
     \caption{\textsc{Marisa} Iberian Trial operational area.}
     \label{fig: 5 TrialArea}
 \end{figure}
