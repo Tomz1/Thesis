@@ -75,7 +75,7 @@
 \chead{}
 \lfoot{}\rfoot{}\cfoot{}
 \pagestyle{fancy}
-%\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[LE,RO]{\thepage}
 \renewcommand{\chaptermark}[1]{\btypeout{\thechapter\space #1}\markboth{\@chapapp\ \thechapter\ #1}{\@chapapp\ \thechapter\ #1}}
 \renewcommand{\sectionmark}[1]{}
 \renewcommand{\subsectionmark}[1]{}

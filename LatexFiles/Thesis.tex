@@ -1,5 +1,5 @@
-%\documentclass[a4paper, 12pt, twoside]{Thesis}% 
-\documentclass[a4paper, 12pt, oneside]{Thesis}%ITS ONESIDE NOW JUST FOR EDITING
+\documentclass[a4paper, 12pt, twoside]{Thesis}% 
+%\documentclass[a4paper, 12pt, oneside]{Thesis}%ITS ONESIDE NOW JUST FOR EDITING
 
 \usepackage[draft]{todonotes}   % notes showed
 
@@ -39,7 +39,7 @@
 \def \cosupervisorname {Rui Maia}
 \def \cosupervisoruniv {Instituto Superior Técnico}
 
-\def \dissertationstatement {Dissertation submitted as partial fulfillment of the requirements for the degree of:}
+\def \dissertationstatement {Dissertation submitted as partial fulfilment of the requirements for the degree of:}
 \def \dissertationtitle {Master in Computer Science Engineering}
 
 \begin{document}
@@ -55,12 +55,13 @@
 \keywords   {}
 \maketitle
 
-\fancyhead{}
-%\fancyfoot[LE,RO]{\thepage} %PAGE NUMBER TO PRINT AFTER...
-\fancyfoot[C]{\thepage}
-\lhead{}
-
 \pagestyle{fancy}
+\fancyhf{}
+\fancyhead[]{}
+%\fancyhead[RE,LO]
+\fancyfoot[LE,RO]{\thepage}
+%\fancyfoot[C]{\thepage}
+%\lhead{}
 
 
 %-------ABSTRACT---------

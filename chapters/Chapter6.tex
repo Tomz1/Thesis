@@ -2,14 +2,19 @@
 \label{chapter:Chapter6}
 \lhead{Chapter 6. \emph{Conclusion and Future Work}}
 
-In summary, this work is concerned with the detection and identification of anomalies at seas. This task in itself, as was discussed throughout this work, is rather complex and can only be meaningful when a suitable definition of anomaly is applied to the problem at hand. Without such particular constraints, both the aim and eventual conclusions become of general scope. Greatly justified by this reason, we were fortunate to have discussed these technicalities with Maritime experts via the \textsc{Marisa} project. Their insights and feedback lead to a workable interaction level which ultimately allowed us for the developmnet of a number of data-driven methods to be applied, resulting in useful and exciting conclusions....
+In summary, this work is concerned with the detection and identification of anomalies at seas. This task in itself, as was discussed throughout this work, is rather complex and can only be meaningful when a suitable definition of anomaly is applied to the problem at hand. Without such particular constraints, both the aim and eventual conclusions become of general scope. Greatly justified by this reason, we were fortunate to have discussed these technicalities with Maritime experts via the \textsc{Marisa} project. Their insights and feedback lead to a workable interaction level which ultimately allowed us for the development of a number of data-driven methods to be applied, 
+resulting in our MAD-F. 
 
+The implemented MAD-F which was developed in accordance with the defined objectives presented in Section~\ref{section: thesis objectives} is able to ingest and process high throughputs of real maritime data. This was achieved with our selection of technologies, namely Python's Pandas package and Apache's Kafka stream processing platform. This provided, generally speaking, a very effective and flexible framework to handle and structure the data. Despite the fact that these tools render the Framework modular and hence scalable, we believe improvements could be achieved by using Apache's Spark cluster-computing framework.
 
-Given the We defined such concep 
-present The concept of anomaly detected, 
+Regarding the transformation of the data into sequential form, we introduced the concept of Behavioural Point $BP$, with which the maritime data features were transformed as to become more suitable for further manipulation. The output data at this stage serves as the adequate input for applying the Anomaly Detection.
+The AD modules implemented for the current MAD-F are rule-based, as opposed to more sophisticated methods. Despite the ever-growing demand for far more complex and involved methodologies, this procedure still yields very satisfactory results. 
 
+There are many reasons for choosing this procedure. Firstly, no publicly-available classified datasets exist for this source of data, to the best of our knowledge. This invariably forbids us from labelling anomalies without the explicit guidance of experts in the field. Secondly, applying more sophisticated methods requires a longer project execution time, which was a delicate issue from the outset. 
+In spite of all these reasons presented above, we are confident the Framework is easily scalable for future development and offers an easy integration of new modules in the future. 
 
-The proposed MAD-F is presented as a solution for this. Despite the acknowledged limitations from Modular Anomaly Detection Framework, the framework is 
+\textsc{Marisa} is admittedly an ambitious endeavour which takes in contributions from multiple partners from all around Europe, as well as institutional agencies of different countries. Progress in highly technical matters is therefore inevitably slower than what would be expected from smaller projects.
 
-The availability of large trajectory datasets in urban environments offers many new opportunities
-for analyzing human displacements in space and time. A
+It is our intention to look into new modules to complement and further expand the scope of this Framework. The linear estimation of the vessel trajectories used in our framework would benefit greatly by employing more intricate estimation methods such as Kalman filter~\cite{Borkowski2017TheFusion, Perera2012MaritimePrediction}. An explicit module for detection of fishing activity, as discussed at length by the Global Fish Watch project~\footnote{http://globalfishingwatch.org/publications/}, would bring added value to the Framework. Lastly, the study of the vessel trajectories, which was based on a point-based analysis up to now, could be upgraded to a time series analysis. Related procedures such as multivariate time series clustering, already mentioned in the state of art in Subsection,~\ref{section: ch2 timeseriesclassification} and~\ref{section: ch2 timeseriesclustering}.  
+
+Additionally, some modules from the developed \textsc{Modular Anomaly Detection Framework}, originated the work~\cite{Machado2019VesselOutliers}, which provided a particular emphasis on the detection of the Rendezvous anomaly detection.
